@@ -1,0 +1,628 @@
+<html>
+  <head>
+    <title>Game Frame</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimal-ui">
+    <link rel='icon' type='image/png' href='http://ledseq.com/gameFrameFavicon.png'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:700,400,300' rel='stylesheet' type='text/css'>
+
+    <script>
+      var files_raw = "|listFiles|";
+      var files = [];
+      var last_folder_created;
+      var api_ip = '|ip|';
+      var gf_defaults = {
+        stockcoin: '|stockcoin|',
+        stockcoinsymbol: '|chart|',
+        brightness: '|brightness|',
+        playmode: '|playMode|',
+        cycletime: '|cycleTime|',
+        displaymode: '|displayMode|',
+        clockface: '|clockFace|'
+      };
+    </script>
+
+    <style type="text/css">
+      body {
+        font-family: 'Open Sans', sans-serif;
+        padding:10px;
+      }
+      .page-container {
+        max-width: 600px;
+        margin:0 auto;
+      }
+      h1, h2, h3, h4 {
+        font-weight:300;
+      }
+      h1 {
+        text-align: center;
+      }
+
+      .button-group {
+        display:-webkit-flex;
+        display:flex;
+        margin:30px 0;
+      }
+      .button-group__button {
+        -webkit-flex:1 1 auto;
+        flex:1 1 auto;
+        text-align:center;
+        cursor:pointer;
+      }
+      .button-group__button:hover {
+        color:#00ff4e;
+      }
+      .button-group__button.power:hover {
+        color: #ff4000;
+      }
+      .button-group__button.menu:hover {
+        color: #006cff;
+      }
+      .button-group__icon {
+        font-size:36px;
+        margin-bottom:5px;
+      }
+
+      .panel-body h4 {
+        margin-top:0;
+      }
+      .panel-heading {
+        padding: 0;
+      }
+      .panel-title > a {
+        display:block;
+        padding: 10px 15px;
+      }
+
+      .two-action-flex {
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+      }
+      .two-action-flex > button {
+        flex: 0 1 auto;
+        -webkit-flex: 0 1 auto;
+      }
+      .two-action-flex button:first-child {
+        margin-right: 5px;
+        margin-bottom: 10px;
+      }
+      .two-action-flex button:last-child {
+        margin-left: 5px;
+        margin-bottom: 10px;
+      }
+
+      @keyframes spinner {
+          to {transform: rotate(360deg);}
+      }
+
+      @-webkit-keyframes spinner {
+          to {-webkit-transform: rotate(360deg);}
+      }
+
+      #page-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        -webkit-align-items: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        text-align: center;
+      }
+      #page-loader > div {
+        background: #fff;
+        padding: 30px;
+        border-radius: 4px;
+      }
+      #page-loader h3 {
+        margin: 20px 0 0 0;
+      }
+      .spinner {
+          width: 48px;
+          height: 48px;
+          display: inline-block;
+          position: relative;
+      }
+      .spinner:before {
+          content: '';
+          width: 48px;
+          height: 48px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 48px;
+          height: 48px;
+      }
+      .spinner:not(:required):before {
+          content: '';
+          border-radius: 50%;
+          border-top: 5px solid #03ade0;
+          border-right: 5px solid transparent;
+          animation: spinner .6s linear infinite;
+          -webkit-animation: spinner .6s linear infinite;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="page-loader">
+      <div>
+        <div class="spinner"></div>
+        <h3>Loading...</h3>
+      </div>
+    </div>
+    <div class="page-container">
+      <h1>Game Frame</h1>
+
+      <div class="button-group">
+        <div class="button-group__button command-trigger power" data-command="power">
+          <div class="button-group__icon glyphicon glyphicon-off"></div>
+          <div class="button-group__label small">Toggle power</div>
+        </div>
+        <div class="button-group__button command-trigger menu" data-command="menu">
+          <div class="button-group__icon glyphicon glyphicon-menu-hamburger"></div>
+          <div class="button-group__label small">Toggle menu</div>
+        </div>
+        <div class="button-group__button command-trigger next" data-command="next">
+          <div class="button-group__icon glyphicon glyphicon-fast-forward"></div>
+          <div class="button-group__label small">Next</div>
+        </div>
+      </div>
+
+      <div class="alerts"></div>
+
+      <div class="panel-group" id="accordion" role="tablist">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#settings">
+                Settings
+              </a>
+            </h4>
+          </div>
+          <div id="settings" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <label for="brightness">Brightness</label>
+                  <input id="brightness" type="range" min="0" max="7" class="funky-select" data-command="set?b">
+                </div>
+                <div class="form-group">
+                  <label for="playmode">Playback mode</label>
+                  <select id='playmode' class="funky-select form-control" data-command="set?p">
+                    <option value='0'>Sequential</option>
+                    <option value='1'>Shuffle</option>
+                    <option value='2'>Shuffle (No Animation)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="cycletime">Cycle interval</label>
+                  <select id='cycletime' class="funky-select form-control" data-command="set?c">
+                    <option value='1'>10 Seconds</option>
+                    <option value='2'>30 Seconds</option>
+                    <option value='3'>1 Minute</option>
+                    <option value='4'>5 Minutes</option>
+                    <option value='5'>15 Minutes</option>
+                    <option value='6'>30 Minutes</option>
+                    <option value='7'>1 Hour</option>
+                    <option value='8'>Infinite</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="displaymode">Display mode</label>
+                  <select id='displaymode' class="funky-select form-control" data-command="set?m">
+                    <option value='0'>Gallery</option>
+                    <option value='1'>Clock</option>
+                    <option value='2'>Effects</option>
+                    <option value='3'>Chart</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="clockface">Clock face</label>
+                  <select id='clockface' class="funky-select form-control" data-command="set?f">
+                    <option value='1'>Color</option>
+                    <option value='2'>Muted</option>
+                    <option value='3'>Shadow</option>
+                    <option value='4'>Binary 1</option>
+                    <option value='5'>Binary 2</option>
+                  </select>
+                </div>
+              </form>
+              <form>
+                <label for="timeZone">Time zone</label>
+                <script>
+                var d = new Date();
+                var n = d.getTimezoneOffset()/60*-1;
+                document.write('<p>Offset from UTC in hours, from -12.0 to 13.0 (Suggested: ' + n + ')</p>');
+                </script>
+                <p><input type="text" class="form-control" name="timeZone" value="|timeZone|">
+                <p><input type="submit" value="Submit" class="funky-timeZone" data-command="set?z"></p>
+              </form>
+
+              <hr>
+              <form>
+                <div class="form-group">
+                  <div class="button-group__icon glyphicon glyphicon-bitcoin"></div>
+                  <label for="stockcoin">Stock &amp; cryptocurrency chart</label>
+                  <p>The time interval between columns is controlled by the "Cycle interval" above, with "infinite" displaying daily charts. Use the "Next" button to switch between area and candlestick chart renderings. The price information is retrived from free third-party APIs Alpha Vantage and CryptoCompare.
+                  <p>Type</p>
+                  <select id='stockcoin' name="stockcoin" class="form-control">
+                    <option value='stock'>Stock</option>
+                    <option value='coin'>Coin</option>
+                  </select>
+                </div>
+
+                <p>Symbol (e.g. BTC,AAPL)</p>
+                <p><input id="chart" type="text" class="form-control" name="stockcoinsymbol" value="|chart|">
+                <p><input type="submit" value="Submit" class="funky-chart"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#files">
+                Files
+              </a>
+            </h4>
+          </div>
+          <div id="files" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+              <div class="two-action-flex">
+                <button class="btn btn-primary" id="start-upload-flow">Upload folder</button>
+                <button class="btn btn-danger" id="start-remove-folder">Remove folder</button>
+              </div>
+
+              <p><b>Now playing: </b>|nowPlaying|</p>
+
+              <ul id="listfiles" class="list-unstyled files-list"></ul>
+
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#info">
+                Game Frame Info
+              </a>
+            </h4>
+          </div>
+          <div id="info" class="panel-collapse collapse in" role="tabpanel">
+            <div class="panel-body">
+              <h4>Network info</h4>
+              <dl>
+                <dt>SSID</dt>
+                <dd>|ssid|</dd>
+                <dt>Local IP</dt>
+                <dd>|ip|</dd>
+                <dt>Subnet Mask</dt>
+                <dd>|subnet|</dd>
+                <dt>Gateway IP</dt>
+                <dd>|gateway|</dd>
+              </dl>
+              <h4>Device info</h4>
+              <dl>
+                <dt>Device ID</dt>
+                <dd>|deviceID|</dd>
+                <dt>System version</dt>
+                <dd>|version|</dd>
+                <dt>Free memory</dt>
+                <dd>|freemem|</dd>
+              </dl>
+              <h4>Firmware</h4>
+              <dl>
+                <dt>Current Version: </dt>
+                <dd>|firmware|</dd>
+              </dl>
+              <p>Check <a href="https://github.com/Jerware/GameFrameV2_WiFi/releases">GitHub</a> for the latest releases.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade modal-upload-flow" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Create folder</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-alerts"></div>
+            <div class="form-group create-folder" data-command="mkdir">
+              <label for="folder-name">Folder name</label>
+              <input type="text" name="mkdir" value="" class="form-control" id="folder-name">
+            </div>
+            <div class="form-group upload-files hidden">
+              <form class="upload-files-form">
+                <div class="form-group">
+                  <label for="folder-name">Upload files</label>
+                  <input type='file' name='my_file[]' multiple>
+                </div>
+              </form>
+            </div>
+            <div class="upload-success hidden">
+              <p><b class="file-count"></b> file(s) uploaded (<b class="byte-count"></b> bytes)</p>
+              <p><a href="#" class="btn btn-success">Play folder now</a></p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary upload-flow-submit">Create folder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade modal-remove-folder" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Remove folder</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-alerts"></div>
+            <div class="form-group" data-command="mkdir">
+              <label for="folder-name">Folder to remove</label>
+              <select name="rmdir" id="remove-folder-select" class="form-control"></select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger remove-folder-submit">Remove folder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    <script>
+      // Render file list
+      $(document).ready(function() {
+        files = files_raw.split(',');
+        renderFiles();
+      });
+
+      // Set default values
+      $.each(gf_defaults, function(key, val) {
+        $('#'+key).val(val);
+      });
+
+      // Flash a message
+      function flash(msg, type) {
+        elm = $('.modal-alerts:visible') ? $('.modal-alerts:visible') : $('.alerts');
+        elm.append('<div class="alert alert-dismissible alert-'+type+'" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+msg+'<div>');
+        setTimeout(function() {
+          elm.find('.alert:first-child').remove();
+        }, 5000);
+      };
+
+      function renderFiles() {
+        files.sort();
+
+        var html = files.map(function(file) {
+          return file.substring(0, 1) == '/' ? '<li><a href="#">'+file+'</a></li>' : '<li>'+file+'</li>';
+        });
+        $('#listfiles').html(html.join(''));
+        $('#listfiles a').on('click', function() {
+          sendCommand('play', $(this).text().substring(1));
+          return false;
+        });
+      };
+
+      // New POST commands
+      function sendCommand(cmd, value) {
+        var dfd = $.Deferred();
+        var data = {};
+        data[cmd] = value || '';
+
+        $.post('http://'+api_ip+'/command', data).done(function(response) {
+          if (response && response.status === 'error') {
+            flash(response.message, 'danger');
+            dfd.reject(response.message);
+          } else {
+            dfd.resolve();
+          }
+        }).fail(function() {
+          flash('Unknown error', 'danger')
+          dfd.reject('Unknown error');
+        });
+        return dfd;
+      };
+      $('.command-trigger').on('click', function(e) {
+        var command = $(e.currentTarget).data('command');
+        e.preventDefault();
+        sendCommand(command);
+      });
+      $('.command-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var elmForm = $(this);
+        var name = elmForm.find('input').val();
+
+        if (name) {
+          sendCommand(elmForm.data('command'), name).done(function() {
+            flash('Created folder: '+name, 'success');
+            elmForm.find('input').val('');
+          });
+        } else {
+          flash('You must provide a folder name', 'warning');
+          elmForm.find('input').focus();
+        }
+      });
+
+      // Folder upload
+      $('#start-upload-flow').on('click', function() {
+        $('.create-folder').removeClass('hidden');
+        $('.upload-files').addClass('hidden');
+        $('.upload-success').addClass('hidden');
+        $('.upload-flow-submit').text('Create folder');
+        $('.modal-upload-flow').modal();
+        // Restore button if it's been hidden:
+        $('.upload-flow-submit').show();
+        // Clear folder name input field
+        $('#folder-name').val('');
+        // The file input may also have to be cleared
+        $('.upload-files-form input').val('');
+
+      });
+
+      $('.upload-flow-submit').on('click', function() {
+
+        if ($('.upload-files.hidden').length) {
+          // Creating folder
+          var elmForm = $('.create-folder');
+          var name = elmForm.find('input').val();
+
+          if (name) {
+            sendCommand(elmForm.data('command'), name).done(function() {
+              flash('Created folder: '+name, 'success');
+              elmForm.addClass('hidden');
+              $('.upload-files').removeClass('hidden');
+              $('.upload-flow-submit').text('Upload files');
+
+              last_folder_created = name;
+              files.push('/'+last_folder_created);
+              renderFiles();
+            });
+          } else {
+            flash('You must provide a folder name', 'warning');
+            elmForm.find('input').focus();
+          }
+        } else {
+          // Uploading files
+          var data = new FormData($('.upload-files-form')[0]);
+          $.ajax({
+              url: 'http://'+api_ip+'/upload',
+              data: data,
+              cache: false,
+              contentType: false,
+              processData: false,
+              type: 'POST',
+              success: function(response){
+                if (response && response.status === 'error') {
+                  flash(response.message, 'danger');
+                } else {
+                  $('.upload-files').addClass('hidden');
+                  $('.upload-success').removeClass('hidden');
+                  $('.file-count').text(response.numUploads);
+                  $('.byte-count').text(response.numBytes);
+
+                  $('.upload-success a').attr('href', '/'+last_folder_created);
+
+                  $('.upload-success a').on('click', function() {
+                    sendCommand('play', $(this).attr('href').substring(1));
+                    return false;
+                  });
+
+                  $('.upload-flow-submit').hide();
+                }
+              },
+              error: function() {
+                flash('Unknown error', 'danger');
+              }
+          });
+        }
+      });
+
+      // Remove folder flow
+      function renderRemoveFolders() {
+        files.sort();
+        var folders = files.map(function(name) {
+          if (name[0] === '/') {
+            return '<option value="'+name.substring(1)+'">'+name+'</option>';
+          }
+          return '';
+        });
+        $('#remove-folder-select').html(folders.join());
+      };
+
+      $('#start-remove-folder').on('click', function() {
+        renderRemoveFolders();
+        $('.modal-remove-folder').modal();
+      });
+
+      $('.remove-folder-submit').on('click', function() {
+        var name = $('#remove-folder-select').val();
+        sendCommand('rmdir', name).done(function() {
+          flash('Removed folder: '+name, 'success');
+
+          files.splice(files.indexOf('/'+name), 1);
+
+          renderRemoveFolders();
+          renderFiles();
+        });
+      });
+
+      // Older funky commands, probably don't add to these
+      function funky(cmd){
+        $.ajax('http://'+api_ip+'/' + cmd);
+      };
+      $('.funky-timeZone').on('click', function(e) {
+        var command = $(e.currentTarget).data('command');
+        command = command+$('input[name="timeZone"]').val();
+        e.preventDefault();
+        funky(command);
+      });
+      $('.funky-chart').on('click', function(e) {
+        e.preventDefault();
+        sendCommand('chart', $('select[name="stockcoin"]').val()+','+$('input[name="stockcoinsymbol"]').val());
+      });
+      $('.funky-command').on('click', function(e) {
+        var command = $(e.currentTarget).data('command');
+        e.preventDefault();
+        funky(command);
+      });
+      $('.funky-select').on('change', function(e) {
+        var command = $(e.target).data('command');
+        command = command+$(e.target).val();
+        funky(command);
+      });
+
+      // Keyboard shortcuts
+      $(window).keydown(function(e) {
+        switch (e.keyCode) {
+          // case 37: // left arrow key
+          // sendCommand("menu");
+          // return;
+          // case 39: // right arrow key
+          // sendCommand("next");
+          // return;
+          case 109: // subtract key
+          sendCommand("chapter-");
+          return;
+          case 107: // add key
+          sendCommand("chapter+");
+          return;
+          case 219: // open bracket key
+          sendCommand("chapter-");
+          return;
+          case 221: // close bracket key
+          sendCommand("chapter+");
+          return;
+        }
+      });
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        $('#page-loader').remove();
+      });
+    </script>
+  </body>
+</html>
