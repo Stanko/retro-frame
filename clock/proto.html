@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clock prototype</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        image-rendering: -moz-crisp-edges;
+        /* IE, only works on <img> tags */
+        -ms-interpolation-mode: nearest-neighbor;
+        /* Firefox */
+        image-rendering: crisp-edges;
+        /* Chromium + Safari */
+        image-rendering: pixelated;
+      }
+
+      body {
+        text-align: center;
+        padding: 40px;
+        background: #333;
+      }
+
+      .clock {
+        background: #000;
+        width: 64px;
+        height: 64px;
+        padding: 12px 4px;
+        display: inline-flex;
+        transform: scale(10);
+        transform-origin: top center;
+      }
+
+      .digit {
+        margin-right: 2px;
+      }
+
+      .digit--h2 {
+        margin-right: 4px;
+      }
+
+      .digit--m2 {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="clock">
+      <img class="digit digit--h digit--h1" />
+      <img class="digit digit--h digit--h2" />
+
+      <img class="digit digit--m digit--m1" />
+      <img class="digit digit--m digit--m2" />
+    </div>
+
+    <script>
+      const h1 = document.querySelector('.digit--h1');
+      const h2 = document.querySelector('.digit--h2');
+      const m1 = document.querySelector('.digit--m1');
+      const m2 = document.querySelector('.digit--m2');
+
+      function updateTime() {
+        const now = new Date();
+
+        let h = now.getHours().toString();
+        if (h.length === 1) {
+          h = `0${h}`;
+        }
+
+        let m = now.getMinutes().toString();
+        if (m.length === 1) {
+          m = `0${m}`;
+        }
+
+        h1.setAttribute('src', `digit-${h[0]}.bmp`);
+        h2.setAttribute('src', `digit-${h[1]}.bmp`);
+        m1.setAttribute('src', `digit-${m[0]}.bmp`);
+        m2.setAttribute('src', `digit-${m[1]}.bmp`);
+      }
+
+      updateTime();
+
+      setInterval(updateTime, 1000);
+    </script>
+  </body>
+</html>
