@@ -6,6 +6,10 @@ const { exec } = require('child_process');
 // const getPixels = require('get-pixels');
 
 async function main(gifPath, resize, color, fit) {
+  if (!fs.existsSync('./output')) {
+    fs.mkdirSync('./output');
+  }
+
   const results = await extractFrames({
     input: gifPath,
     output: './output/frame-%d.png',
@@ -105,6 +109,8 @@ async function main(gifPath, resize, color, fit) {
 
 const args = process.argv.slice(2);
 
+// Usage
+// node gif-to-bmp.js input.gif [resize] [bg-color] [fit]
 if (args[0] && args[0].length > 2) {
   let resize = 0;
   if (args[1] && parseInt(args[1], 10)) {
