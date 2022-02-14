@@ -36,16 +36,9 @@ matrix.display.show(sprite_group)
 # ------- Clock setup
 
 TWELVE_HOUR = False
-CLOCK_PADDING = 4
-DIGIT_WIDTH = 12
-DIGIT_MARGIN = 2
-DIGIT_HEIGHT = 32
-DIGIT_Y = (64 - DIGIT_HEIGHT) / 2
 
 last_time_string = ""
 last_update_in_ms = 0
-
-digits_sprite = None
 
 # ------- Splash
 
@@ -76,7 +69,7 @@ CLOCK = "clock"
 
 DISPLAY_MODES = [SINGLE, LOOP, CLOCK]
 
-LOOP_TIME = 180  # in seconds
+LOOP_TIME = 300  # in seconds
 
 # ------- BMPs
 BMP_FOLDER = "/bmp"
@@ -107,22 +100,63 @@ if images_count == 0:
 # --------- Modes
 
 
-def change_mode():
-    global display_mode_index, DISPLAY_MODES, last_time_string, digits_sprite
+def change_mode(index_to_set = None):
+    global display_mode_index, DISPLAY_MODES, last_time_string
 
-    display_mode_index = (display_mode_index + 1) % len(DISPLAY_MODES)
+    if index_to_set == None:
+        display_mode_index = (display_mode_index + 1) % len(DISPLAY_MODES)
+    else:
+        display_mode_index = index_to_set
 
     last_time_string = ""
 
     if DISPLAY_MODES[display_mode_index] != CLOCK:
-        digits_sprite = None
         load_image()
         show_frame(None)
     else:
-        digits_sprite = OnDiskBitmap(open('/clock/sprite.bmp', 'rb'))
+        create_clock_sprite()
 
 # ---------- Clock
 
+def create_clock_sprite():
+    global sprite_group
+
+    # Empty sprite group
+    while sprite_group:
+        sprite_group.pop()
+
+    gc.collect()
+
+    digits_sprite = OnDiskBitmap(open('/clock/sprite.bmp', 'rb'))
+
+    # 5 tiles
+    # first one is time separator ":"
+    # other four are digits
+    digit_x_positions = [31, 3, 17, 35, 49]
+
+    for x in digit_x_positions:
+        digit_tilemap = TileGrid(
+            digits_sprite,
+            pixel_shader=digits_sprite.pixel_shader,
+            width=1,
+            height=1,
+            tile_width=12,
+            tile_height=40,
+            x=x,
+            y=12,
+        )
+        sprite_group.append(digit_tilemap)
+
+    # Set time separator tile
+    # 42nd tile is time separator
+    sprite_group[0][0] = 41  
+
+    # Set digits to blank tiles
+    # 41st tile is just black
+    sprite_group[1][0] = 40
+    sprite_group[2][0] = 40
+    sprite_group[3][0] = 40
+    sprite_group[4][0] = 40
 
 def parse_time(timestring):
     # Separate into date and time
@@ -265,7 +299,6 @@ def show_frame(delta_time):
 
 # ------- Init
 
-
 try:
     time_from_api = update_time()
 except:
@@ -276,7 +309,7 @@ last_sync = time.mktime(time_from_api)
 if DISPLAY_MODES[display_mode_index] != CLOCK:
     load_image()
 else:
-    digits_sprite = OnDiskBitmap(open('/clock/sprite.bmp', 'rb'))
+    create_clock_sprite()
 
 
 # ------- Main loop
@@ -285,7 +318,19 @@ while True:
     button_down.update()
     button_up.update()
 
+    is_clock = DISPLAY_MODES[display_mode_index] == CLOCK
+
     current_time_in_ms = time.monotonic() * 1000
+    now_struct = time.localtime()
+
+    # At midnight change to clock
+    if now_struct.tm_hour == 0 and now_struct.tm_min == 0 and now_struct.tm_sec == 0 and not is_clock:
+        print("automatically change to clock")
+        change_mode(2) # clock
+    # In morning switch to images
+    elif now_struct.tm_hour == 9 and now_struct.tm_min == 0 and now_struct.tm_sec == 0 and is_clock:
+        print("automatically change to images")
+        change_mode(1) # loop images
 
     if current_time_in_ms == 0:
         delta_time = None
@@ -298,54 +343,47 @@ while True:
 
     # Handle button down
     if button_down.fell:
-        if DISPLAY_MODES[display_mode_index] != CLOCK:
-            change_image()
         # Clock
-        else:
+        if is_clock:
             try_to_update_time()
+        # Images
+        else:
+            change_image()
 
-    # Images
-    if DISPLAY_MODES[display_mode_index] != CLOCK:
-        show_frame(delta_time)
-    # Clock
-    else:
-        now = time.localtime()
-        time_string = hh_mm(now)
+    # Clock logic
+    if is_clock and len(sprite_group) > 1:
+        time_string = hh_mm(now_struct)
 
+        # Separator blinking each second
+        # if delta_time > 1000:
+        #     last_update_in_ms = time.monotonic() * 1000
+
+        #     if sprite_group[0][0] == 41:
+        #         sprite_group[0][0] = 40  # 41st tile is just black
+        #     else:
+        #         sprite_group[0][0] = 41  # 42nd tile is time separator
+
+        # Time needs to be updated
         if time_string != last_time_string:
             last_time_string = time_string
 
-            # Empty group
-            while sprite_group:
-                sprite_group.pop()
-
+            # Go through the group and update tiles
             for index, digit in enumerate(time_string):
-                x = index * DIGIT_WIDTH + index * DIGIT_MARGIN + CLOCK_PADDING
-                if index > 1:
-                    # Double space between hours and minutes
-                    x += DIGIT_MARGIN
-
-                digit_tilemap = TileGrid(
-                    digits_sprite,
-                    pixel_shader=digits_sprite.pixel_shader,
-                    width=1,
-                    height=1,
-                    tile_width=12,
-                    tile_height=40,
-                    x=x,
-                    y=12,
-                )
-        
                 digit_int = int(digit)
 
-                sprite_group.append(digit_tilemap)
 
                 # Skip hour leading zero
                 if index == 0 and digit == '0':
-                    sprite_group[index][0] = 40 # last frame in the sprite is just black
+                    # we use index + 1 as index 0 is reserved for separator
+                    sprite_group[index + 1][0] = 40 # 41st tile is just black
                 else:
-                    sprite_group[index][0] = digit_int + (index * 10) # sprite has 4 sets of digits
+                    # we use index + 1 as index 0 is reserved for separator
+                    sprite_group[index + 1][0] = digit_int + (index * 10) # sprite has 4 sets of digits
+    # Images logic
+    else:
+        show_frame(delta_time)
 
+    # Update time
     now = time.time()  # Current epoch time in seconds
 
     # Sync with time server every 2 hours
