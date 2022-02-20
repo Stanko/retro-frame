@@ -1,6 +1,8 @@
 import time 
 import gc
 
+from re import search
+
 from os import listdir
 from board import BUTTON_DOWN, BUTTON_UP, NEOPIXEL
 from displayio import Group, OnDiskBitmap, TileGrid
@@ -247,32 +249,55 @@ def load_image():
 
     bitmap = OnDiskBitmap(open(image_path, "rb"))
 
-    # Check for "\d\d-" pattern at the start of the filename
-    # If detected number is used a frames per second value
-    if filename[0].isdigit() and filename[1].isdigit() and filename[2] == '-':
-        frame_duration_in_ms = 1.0 / int(filename[0:2]) * 1000
+    # Check for "\d\dfps" pattern in the filename
+    # If detected the number is used a fps value
+    fps = search("(\d\d)fps", filename)
+    
+    if fps:
+        frame_duration_in_ms = 1.0 / int(fps.group(1)) * 1000
     else:
         frame_duration_in_ms = 100
 
-    # Detect sprite orientation
-    if (bitmap.height > bitmap.width):
-        frame_count = int(bitmap.height / bitmap.width)
-        tile_size = bitmap.width
-    else:
-        frame_count = int(bitmap.width / bitmap.height)
-        tile_size = bitmap.height
+    # Check for "(\d\d)x(\d\d)" pattern in the filename
+    # If detected numbers are used as tile width and height
+    size = search("(\d\d)x(\d\d)", filename)
+    
+    if size:
+        tile_width = int(size.group(1))
+        tile_height = int(size.group(2))
 
-    offset = int((matrix.display.height - bitmap.width) / 2)
+    # Detect sprite orientation
+    # if there is no size in the filename, each frame is considered to be a square
+    if (bitmap.height > bitmap.width):
+        if not size:
+            tile_width = bitmap.width
+            tile_height = bitmap.width
+
+        frame_count = int(bitmap.height / tile_height)
+    else:
+        if not size:
+            tile_height = bitmap.height
+            tile_width = bitmap.height
+
+        frame_count = int(bitmap.width / tile_width)
+
+    x_offset = int((64 - tile_width) / 2)
+    y_offset = int((64 - tile_height) / 2)
+
+    # print("**", filename)
+    # print("size", tile_width, "x", tile_height)
+    # print("frame count", frame_count)
+    # print("frame duration", frame_duration_in_ms, "ms")
 
     sprite = TileGrid(
         bitmap,
         pixel_shader=bitmap.pixel_shader,
         width=1,
         height=1,
-        tile_width=tile_size,
-        tile_height=tile_size,
-        x=offset,
-        y=offset,
+        tile_width=tile_width,
+        tile_height=tile_height,
+        x=x_offset,
+        y=y_offset,
     )
 
     sprite_group.append(sprite)
