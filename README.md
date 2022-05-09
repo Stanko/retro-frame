@@ -10,6 +10,10 @@ Check few more images and videos [here](https://imgur.com/a/cLXGWWd).
 
 Repo was never really prepared for open sourcing, meaning there are a lot of junk/temporary files lying around and missing documentation. This was my first ever python project, so the code is probably not the cleanest you ever saw.
 
+There is a similar project you might want to check out:
+
+- https://github.com/hanneslinder/esp-pixel-matrix
+
 ## Intro
 
 The brain is [Adafruit MatrixPortal M4](https://www.adafruit.com/product/4745), ESP32 based controller. You'll need to follow Adafruit's documentation to install Circuit Python. Then you can copy my code (don't forget to create `secrets.py` if you want the display to connect to the internet).
