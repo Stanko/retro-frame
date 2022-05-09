@@ -4,7 +4,7 @@ DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-fr
 
 ![Retro Frame](retro-frame.jpg)
 
-Check few more images and videos [here](https://imgur.com/a/cLXGWWd).
+Check a few more images and videos [here](https://imgur.com/a/cLXGWWd).
 
 ## Disclaimer
 
@@ -51,6 +51,8 @@ This is a list of all of the main parts with the links to the ones I used.
 - IKEA SANNAHED picture frame
 - Buttons - https://www.aliexpress.com/item/4000043687021.html
 - USB C cable - https://www.aliexpress.com/item/1005002105030431.html
+
+![Retro Frame internals](retro-frame-internals.jpg)
 
 ## Art credits
 
