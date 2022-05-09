@@ -4,6 +4,8 @@ DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-fr
 
 ![Retro Frame](retro-frame.jpg)
 
+Check few more images and videos [here](https://imgur.com/a/cLXGWWd).
+
 ## Disclaimer
 
 Repo was never really prepared for open sourcing, meaning there are a lot of junk/temporary files lying around and missing documentation. This was my first ever python project, so the code is probably not the cleanest you ever saw.
@@ -19,8 +21,6 @@ Files you'll need to copy to your MatrixPortal are:
 - `clock/sprite.bmp`
 - `secrets.py` (rename `secrets-example.py` and add your network name and password)
 - `bmp` (pick and choose animation sprites you like)
-
-<video src="retro-frame.mov#t=0.001"></video>
 
 ## Modes
 
