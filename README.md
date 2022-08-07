@@ -62,9 +62,9 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 
 - [Bear](https://rephildesign.tumblr.com/post/120859307063/filbertgames-this-is-what-happens-when-you)
 - [Dog](https://dribbble.com/shots/2367354-Doggy-Rabbit)
-- [Ember Spirit](https://33.media.tumblr.com/3f53a2565f16799b155d33072ef5fca0/tumblr_nalmwaJGah1sgajexo2_250.gif)
-- [Dota emojis (diretide, giff, pumkin)](https://dota2.fandom.com/wiki/Emoticons)
+- [Dota emojis (diretide, giff)](https://dota2.fandom.com/wiki/Emoticons)
 - Earth and Moon - generated using wonderful [PixelPlanets](https://github.com/Deep-Fold/PixelPlanets)
+- [Ember Spirit](https://33.media.tumblr.com/3f53a2565f16799b155d33072ef5fca0/tumblr_nalmwaJGah1sgajexo2_250.gif)
 - [Hollow Knight](https://www.deviantart.com/haykira/art/Hallownest-Fellas-841502305)
 - [Link](https://www.deviantart.com/world-of-noel/art/Linked-Seasons-Link-361192040)
 - [Madeline](https://rephil.dribbble.com/)
@@ -72,9 +72,9 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Mario jumping](https://pug-of-war.tumblr.com/post/116535010016/its-a-me-ah-mario)
 - [Mega Man](https://www.deviantart.com/bionicandrew1/art/MegaMan-MvC-Moves-736040903)
 - [Nyan cat](https://www.nyan.cat/credits.php)
-- [Robin](http://www.playiconoclasts.com/)
+- [Ori](https://twitter.com/WoostarsPixels/status/1543954734108872705?cxt=HHwWgsC8vdCpne0qAAAA)
 - [Rafael](https://adamklingpixel.weebly.com/)
-- [Space](https://fulifuli.tumblr.com/post/164934733690/space-is-beautiful-check-out-my-society6)
+- [Robin](http://www.playiconoclasts.com/)
 
 ### Myself
 
