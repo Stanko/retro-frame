@@ -75,6 +75,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Ori](https://twitter.com/WoostarsPixels/status/1543954734108872705?cxt=HHwWgsC8vdCpne0qAAAA)
 - [Rafael](https://adamklingpixel.weebly.com/)
 - [Robin](http://www.playiconoclasts.com/)
+- [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
 
 ### Myself
 
