@@ -90,7 +90,7 @@ display_mode_index = 1  # loop images
 current_image = 0
 current_frame = 0
 frame_count = 0
-frame_duration_in_s = 0.1
+frame_duration_in_ms = 100
 loop_started_time = time.time()
 
 images_count = len(bmp_file_list)
@@ -138,18 +138,12 @@ def create_clock_sprite():
     digit_x_positions = [31, 3, 17, 35, 49]
 
     for x in digit_x_positions:
-        tile_width = 12
-
-        # separator ":" is 2px wide
-        if (x == 31):
-            tile_width = 2
-
         digit_tilemap = TileGrid(
             digits_sprite,
             pixel_shader=digits_sprite.pixel_shader,
             width=1,
             height=1,
-            tile_width=tile_width,
+            tile_width=12,
             tile_height=40,
             x=x,
             y=12,
@@ -219,8 +213,7 @@ def try_to_update_time():
 def hh_mm(time_struct):
     if TWELVE_HOUR:
         if time_struct.tm_hour > 12:
-            # 13-23 -> 1-11 (pm)
-            hour_string = str(time_struct.tm_hour - 12)
+            hour_string = str(time_struct.tm_hour - 12)  # 13-23 -> 1-11 (pm)
         elif time_struct.tm_hour > 0:
             hour_string = str(time_struct.tm_hour)  # 1-12
         else:
@@ -245,7 +238,7 @@ def change_image():
 
 
 def load_image():
-    global current_image, images_count, current_frame, frame_count, sprite_group, frame_duration_in_s
+    global current_image, images_count, current_frame, frame_count, sprite_group, frame_duration_in_ms
 
     # Empty sprite group
     while sprite_group:
@@ -264,9 +257,9 @@ def load_image():
     fps = search("(\d\d)fps", filename)
 
     if fps:
-        frame_duration_in_s = 1.0 / float(fps.group(1))
+        frame_duration_in_ms = 1.0 / int(fps.group(1)) * 1000
     else:
-        frame_duration_in_s = 0.1
+        frame_duration_in_ms = 100
 
     # Check for "(\d\d)x(\d\d)" pattern in the filename
     # If detected numbers are used as tile width and height
@@ -297,7 +290,7 @@ def load_image():
     # print("**", filename)
     # print("size", tile_width, "x", tile_height)
     # print("frame count", frame_count)
-    # print("frame duration", frame_duration_in_s, "s")
+    # print("frame duration", frame_duration_in_ms, "ms")
 
     sprite = TileGrid(
         bitmap,
@@ -314,8 +307,11 @@ def load_image():
     current_frame = 0
 
 
-def show_frame():
-    global current_frame, loop_started_time, sprite_group, frame_count, last_update_in_ms, frame_duration_in_s
+def show_frame(delta_time):
+    global current_frame, loop_started_time, sprite_group, frame_count, last_update_in_ms, frame_duration_in_ms
+
+    if delta_time == None or delta_time < frame_duration_in_ms:
+        return
 
     sprite_group[0][0] = current_frame
 
@@ -344,6 +340,7 @@ if DISPLAY_MODES[display_mode_index] != CLOCK:
 else:
     create_clock_sprite()
 
+
 # ------- Main loop
 
 while True:
@@ -352,6 +349,7 @@ while True:
 
     is_clock = DISPLAY_MODES[display_mode_index] == CLOCK
 
+    current_time_in_ms = time.monotonic() * 1000
     now_struct = time.localtime()
 
     # At midnight change to clock
@@ -362,6 +360,11 @@ while True:
     elif now_struct.tm_hour == 9 and now_struct.tm_min == 0 and now_struct.tm_sec == 0 and is_clock:
         print("automatically change to images")
         change_mode(1)  # loop images
+
+    if current_time_in_ms == 0:
+        delta_time = None
+    else:
+        delta_time = current_time_in_ms - last_update_in_ms
 
     # Handle button up
     if button_up.fell:
@@ -380,6 +383,15 @@ while True:
     if is_clock and len(sprite_group) > 1:
         time_string = hh_mm(now_struct)
 
+        # Separator blinking each second
+        # if delta_time > 1000:
+        #     last_update_in_ms = time.monotonic() * 1000
+
+        #     if sprite_group[0][0] == 41:
+        #         sprite_group[0][0] = 40  # 41st tile is just black
+        #     else:
+        #         sprite_group[0][0] = 41  # 42nd tile is time separator
+
         # Time needs to be updated
         if time_string != last_time_string:
             last_time_string = time_string
@@ -390,22 +402,19 @@ while True:
 
                 # Skip hour leading zero
                 if index == 0 and digit == '0':
-                    # we use index + 1 because 0 is reserved for separator
-                    # 41st tile is just black
-                    sprite_group[index + 1][0] = 40
+                    # we use index + 1 as index 0 is reserved for separator
+                    sprite_group[index + 1][0] = 40  # 41st tile is just black
                 else:
-                    # we use index + 1 because 0 is reserved for separator
+                    # we use index + 1 as index 0 is reserved for separator
                     sprite_group[index + 1][0] = digit_int + \
                         (index * 10)  # sprite has 4 sets of digits
-
-        # Sync with time server every 2 hours
-        if now - last_sync > 7200:
-            try_to_update_time()
     # Images logic
     else:
-        show_frame()
-
-    time.sleep(frame_duration_in_s)
+        show_frame(delta_time)
 
     # Update time
     now = time.time()  # Current epoch time in seconds
+
+    # Sync with time server every 2 hours
+    if now - last_sync > 7200:
+        try_to_update_time()
