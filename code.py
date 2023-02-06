@@ -132,33 +132,37 @@ def create_clock_sprite():
 
     digits_sprite = OnDiskBitmap(open('/clock/sprite.bmp', 'rb'))
 
-    # 5 tiles
-    # first one is time separator ":"
-    # other four are digits
-    digit_x_positions = [31, 3, 17, 35, 49]
+    # separator
+    separator_tilemap = TileGrid(
+        digits_sprite,
+        pixel_shader=digits_sprite.pixel_shader,
+        width=1,
+        height=1,
+        tile_width=2,
+        tile_height=40,
+        x=31,
+        y=12,
+    )
+    sprite_group.append(separator_tilemap)
+
+    # Set time separator tile, it is 2px wide and all the way right
+    sprite_group[0][0] = 246
+
+    # digits
+    digit_x_positions = [3, 17, 35, 49]
 
     for x in digit_x_positions:
-        tile_width = 12
-
-        # separator ":" is 2px wide
-        if (x == 31):
-            tile_width = 2
-
         digit_tilemap = TileGrid(
             digits_sprite,
             pixel_shader=digits_sprite.pixel_shader,
             width=1,
             height=1,
-            tile_width=tile_width,
+            tile_width=12,
             tile_height=40,
             x=x,
             y=12,
         )
         sprite_group.append(digit_tilemap)
-
-    # Set time separator tile
-    # 42nd tile is time separator
-    sprite_group[0][0] = 41
 
     # Set digits to blank tiles
     # 41st tile is just black
@@ -345,6 +349,8 @@ else:
     create_clock_sprite()
 
 # ------- Main loop
+
+now = time.time()
 
 while True:
     button_down.update()
