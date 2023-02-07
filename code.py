@@ -114,11 +114,14 @@ def change_mode(index_to_set=None):
 
     if DISPLAY_MODES[display_mode_index] != CLOCK:
         load_image()
-        show_frame(None)
+        show_frame()
     else:
         create_clock_sprite()
 
 # ---------- Clock
+
+
+SEPARATOR_TILE_INDEX = 246
 
 
 def create_clock_sprite():
@@ -146,7 +149,7 @@ def create_clock_sprite():
     sprite_group.append(separator_tilemap)
 
     # Set time separator tile, it is 2px wide and all the way right
-    sprite_group[0][0] = 246
+    sprite_group[0][0] = SEPARATOR_TILE_INDEX
 
     # digits
     digit_x_positions = [3, 17, 35, 49]
@@ -389,6 +392,9 @@ while True:
         # Time needs to be updated
         if time_string != last_time_string:
             last_time_string = time_string
+
+            # Separator tile
+            sprite_group[0][0] = SEPARATOR_TILE_INDEX
 
             # Go through the group and update tiles
             for index, digit in enumerate(time_string):
