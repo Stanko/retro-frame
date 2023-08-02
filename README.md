@@ -64,10 +64,11 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Dog](https://dribbble.com/shots/2367354-Doggy-Rabbit)
 - [Dota emojis (diretide, giff, es)](https://dota2.fandom.com/wiki/Emoticons)
 - Earth and Moon - generated using wonderful [PixelPlanets](https://github.com/Deep-Fold/PixelPlanets)
-- [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
-- [Jim](https://hani-amir.com/blog/2017/2/7/pixel-art-animation-basics-5-classic-side-scrolling-walking-running-animations-from-the-snes-era)
 - [Ember Spirit](https://33.media.tumblr.com/3f53a2565f16799b155d33072ef5fca0/tumblr_nalmwaJGah1sgajexo2_250.gif)
+- [Haunted pumpkin](https://pixeljoint.com/pixelart/25807.htm)
 - [Hollow Knight](https://www.deviantart.com/haykira/art/Hallownest-Fellas-841502305)
+- [Jim](https://hani-amir.com/blog/2017/2/7/pixel-art-animation-basics-5-classic-side-scrolling-walking-running-animations-from-the-snes-era)
+- [Jumping pumpkin](https://pixeljoint.com/pixelart/15445.htm)
 - [Link](https://www.deviantart.com/world-of-noel/art/Linked-Seasons-Link-361192040)
 - [Madeline](https://rephil.dribbble.com/)
 - [Mario chase](https://rephil.dribbble.com/)
@@ -77,6 +78,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Ori](https://twitter.com/WoostarsPixels/status/1543954734108872705?cxt=HHwWgsC8vdCpne0qAAAA)
 - [Rafael](https://adamklingpixel.weebly.com/)
 - [Robin](http://www.playiconoclasts.com/)
+- [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
 - [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
 
 ### Myself
