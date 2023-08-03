@@ -31,7 +31,6 @@ Files you'll need to copy to your MatrixPortal are:
 There are three modes:
 
 - Slideshow (runs each animation for 5 minutes then switches to the next one)
-- Single animation mode (runs in indefinitely)
 - Clock mode (needs internet connection to get time)
 
 Button `up` will cycle between these three modes. Button `down` will change between animations in the first two modes and try to update time in the clock mode.
