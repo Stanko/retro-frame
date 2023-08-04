@@ -4,10 +4,10 @@ class BaseApp:
         pass
 
     def draw_frame(self) -> float:
-        raise (f"Draw frame function is not implemented for app {self.name}")
+        raise Exception(f"Draw frame function is not implemented for app {self.name}")
 
     def handle_button_down(self) -> None:
-        raise (f"Handle button down not implemented for app {self.name}")
+        raise Exception(f"Handle button down not implemented for app {self.name}")
 
     # When you print an object from BaseApp it will print its internal state
     def __repr__(self):
