@@ -26,6 +26,8 @@ class LoopImagesApp(BaseApp):
         self.load_image()
     
     def load_image(self):
+        if len(self.filepaths) == 0:
+            return
         self.display.clear()
 
         image_path = self.filepaths[self.current_image_index]
@@ -90,6 +92,8 @@ class LoopImagesApp(BaseApp):
         self.change_image()
     
     def draw_frame(self) -> float:
+        if len(self.filepaths) == 0:
+            return 0.1
         self.display.sprite_group[0][0] = self.current_frame
         self.current_frame = (self.current_frame + 1) % self.frame_count
         if self.current_frame == 0:
