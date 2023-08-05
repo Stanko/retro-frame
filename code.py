@@ -10,6 +10,7 @@ from src.display_module import DisplayModule
 from src.gif_player_app import GifPlayerApp
 from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
+from src.real_time_module import RealTimeClockModule
 
 
 class RetroFrame:
@@ -19,6 +20,7 @@ class RetroFrame:
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
         self.network: NetworkModule = NetworkModule(skip_connection=skip_connection)
+        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, skip_connection)
 
         self.bmp_folder =bmp_folder
         self.bmp_file_list = sorted(
@@ -41,7 +43,7 @@ class RetroFrame:
         # Dictonary order is irrelevant, it will be sorted when switching apps
         self.apps = {
             LoopImagesApp.name: lambda: LoopImagesApp(self.bmp_file_list, self.display),
-            ClockApp.name: lambda: ClockApp(self.display, self.network),
+            ClockApp.name: lambda: ClockApp(self.display, self.network, self.real_time),
             GifPlayerApp.name: lambda: GifPlayerApp(self.gif_file_list, self.display),
         }
 
@@ -54,7 +56,7 @@ class RetroFrame:
     def set_current_app(self, name: str):
         if name in self.apps.keys():
              # Clear reference before loading new app to allow GC to clean up
-            old_app_name = self.current_app.name if self.current_app else None
+            # old_app_name = self.current_app.name if self.current_app else None
             # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
             self.current_app = None
             self.display.clear()
@@ -79,10 +81,12 @@ class RetroFrame:
         self.current_app = LoopImagesApp(["./splash.bmp"], self.display)
         self.current_app.draw_frame()
         self.network.connect()
-        # self.next_app()
-        self.set_current_app(GifPlayerApp.name)
+        self.real_time.check_for_time_sync()
+        self.set_current_app(ClockApp.name)
         while True:
+            # print(f"Current available memory: {gc.mem_free()} bytes")
             gc.collect()
+            self.real_time.check_for_time_sync()
             self.check_for_scheduled_app_switch()
 
             # Handle button up - change app
@@ -95,6 +99,5 @@ class RetroFrame:
             sleep_duration = self.current_app.draw_frame()
             time.sleep(sleep_duration)
 
-# print(f"Available memory before starting RetroFrame: {gc.mem_free()} bytes")
-frame = RetroFrame("/bmp", "/gif", skip_connection=True)
+frame = RetroFrame("/bmp", "/gif", skip_connection=False)
 frame.run()
