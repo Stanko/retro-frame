@@ -1,18 +1,20 @@
 import time
 from os import listdir
+import gc
 
 from board import BUTTON_DOWN, BUTTON_UP
 
 from src.button_module import ButtonModule
 from src.clock_app import ClockApp
 from src.display_module import DisplayModule
+from src.gif_player_app import GifPlayerApp
 from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
 
 
 class RetroFrame:
     """Container class for all modules and apps."""
-    def __init__(self, bmp_folder: str = "/bmp", skip_connection: bool = False):
+    def __init__(self, bmp_folder: str = "/bmp", gif_folder: str = "/gif", skip_connection: bool = False):
         self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
@@ -26,23 +28,39 @@ class RetroFrame:
                 if (f.endswith(".bmp") and not f.startswith("."))
             ]
         )
+        self.gif_folder = gif_folder
+        self.gif_file_list = sorted(
+            [
+                f"{self.gif_folder}/{f}"
+                for f in listdir(self.gif_folder)
+                if (f.endswith(".gif") and not f.startswith("."))
+            ]
+        )
         self.current_app = None
         # Store anonymous functions that return app objects to preserve memory
         # Dictonary order is irrelevant, it will be sorted when switching apps
         self.apps = {
             LoopImagesApp.name: lambda: LoopImagesApp(self.bmp_file_list, self.display),
             ClockApp.name: lambda: ClockApp(self.display, self.network),
+            GifPlayerApp.name: lambda: GifPlayerApp(self.gif_file_list, self.display),
         }
 
     def next_app(self):
         app_list = sorted(self.apps.keys())
         current_app_index = app_list.index(self.current_app.name)
         current_app_index = (current_app_index + 1) % len(app_list)
-        self.current_app = self.apps[app_list[current_app_index]]()
+        self.set_current_app(app_list[current_app_index])
     
     def set_current_app(self, name: str):
         if name in self.apps.keys():
+             # Clear reference before loading new app to allow GC to clean up
+            old_app_name = self.current_app.name if self.current_app else None
+            # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
+            self.current_app = None
+            self.display.clear()
+            # print(f"Memory usage after unloading {old_app_name}: {gc.mem_free()} bytes")
             self.current_app = self.apps[name]()
+            # print(f"Available memory after loading {self.current_app.name}: {gc.mem_free()} bytes")
         else:
             raise ValueError(f"App {name} not found in {self.apps.keys()}")
 
@@ -57,11 +75,14 @@ class RetroFrame:
             self.set_current_app(LoopImagesApp.name)
     
     def run(self) -> None:
+        # print(f"Available memory before network connection: {gc.mem_free()} bytes")
         self.current_app = LoopImagesApp(["./splash.bmp"], self.display)
         self.current_app.draw_frame()
         self.network.connect()
-        self.next_app()
+        # self.next_app()
+        self.set_current_app(GifPlayerApp.name)
         while True:
+            gc.collect()
             self.check_for_scheduled_app_switch()
 
             # Handle button up - change app
@@ -74,5 +95,6 @@ class RetroFrame:
             sleep_duration = self.current_app.draw_frame()
             time.sleep(sleep_duration)
 
-frame = RetroFrame("/bmp", skip_connection=False)
+# print(f"Available memory before starting RetroFrame: {gc.mem_free()} bytes")
+frame = RetroFrame("/bmp", "/gif", skip_connection=True)
 frame.run()

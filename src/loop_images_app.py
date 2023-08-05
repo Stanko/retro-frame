@@ -4,6 +4,7 @@ from re import search
 from displayio import OnDiskBitmap, TileGrid
 
 from src.base_app import BaseApp
+from src.utils import compute_dimensions_and_offset, fps_from_filename, frame_count_from_bitmap
 
 
 class LoopImagesApp(BaseApp):
@@ -34,39 +35,14 @@ class LoopImagesApp(BaseApp):
         filename = image_path.split("/")[-1]
         bitmap = OnDiskBitmap(open(image_path, "rb"))
 
-        # Check for "\d\dfps" pattern in the filename
-        # If detected the number is used a fps value
-        fps = search("(\d\d)fps", filename)
+        fps = fps_from_filename(filename)
         if fps:
-            self.frame_duration_in_s = 1.0 / float(fps.group(1))
+            self.frame_duration_in_s = 1.0 / float(fps)
         else:
             self.frame_duration_in_s = 0.1
 
-        # Check for "(\d\d)x(\d\d)" pattern in the filename
-        # If detected numbers are used as tile width and height
-        size = search("(\d\d)x(\d\d)", filename)
-        if size:
-            tile_width = int(size.group(1))
-            tile_height = int(size.group(2))
-
-        # Detect sprite orientation
-        # if there is no size in the filename, each frame is considered to be a square
-        if (bitmap.height > bitmap.width):
-            if not size:
-                tile_width = bitmap.width
-                tile_height = bitmap.width
-
-            self.frame_count = int(bitmap.height / tile_height)
-        else:
-            if not size:
-                tile_height = bitmap.height
-                tile_width = bitmap.height
-
-            self.frame_count = int(bitmap.width / tile_width)
-
-        x_offset = int((64 - tile_width) / 2)
-        y_offset = int((64 - tile_height) / 2)
-
+        tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(bitmap, filename)
+        self.frame_count = frame_count_from_bitmap(bitmap)
         # print("filename", filename)
         # print("width", tile_width, "height", tile_height)
         # print("offset_x", x_offset, "offset_y", y_offset)
