@@ -4,7 +4,7 @@ import displayio
 from re import search
 
 from src.base_app import BaseApp
-from src.utils import compute_dimensions_and_offset
+from src.utils import compute_dimensions_and_offset, fps_from_filename
 
 
 class GifPlayerApp(BaseApp):
@@ -18,6 +18,7 @@ class GifPlayerApp(BaseApp):
         self.current_gif = None
         self.current_git_start_time = None
         self.loop_time_seconds = loop_time_seconds
+        self.fps = None
 
         self.load_gif()
     
@@ -33,6 +34,7 @@ class GifPlayerApp(BaseApp):
         image_path = self.filepaths[self.current_image_index]
         filename = image_path.split("/")[-1]
         self.current_gif = gifio.OnDiskGif(image_path)
+        self.fps = fps_from_filename(filename)
 
         tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(self.current_gif.bitmap, filename)
         sprite = displayio.TileGrid(
@@ -65,4 +67,8 @@ class GifPlayerApp(BaseApp):
             self.current_frame = 0
             if (time.time() - self.current_git_start_time) > self.loop_time_seconds:
                 self.next_gif()
-        return self.current_gif.next_frame()
+        suggested = self.current_gif.next_frame()
+        if self.fps is None:
+            return suggested
+        else:
+            return float(1 / self.fps)
