@@ -55,7 +55,7 @@ class RetroFrame:
     
     def set_current_app(self, name: str):
         if name in self.apps.keys():
-             # Clear reference before loading new app to allow GC to clean up
+            # Clear reference before loading new app to allow GC to clean up
             # old_app_name = self.current_app.name if self.current_app else None
             # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
             self.current_app = None
