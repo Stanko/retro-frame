@@ -62,6 +62,7 @@ class GifPlayerApp(BaseApp):
             return 0.1
         self.current_frame += 1
         if self.current_frame == self.current_gif.frame_count:
+            self.current_frame = 0
             if (time.time() - self.current_git_start_time) > self.loop_time_seconds:
                 self.next_gif()
         return self.current_gif.next_frame()
