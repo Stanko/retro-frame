@@ -74,7 +74,7 @@ class RetroFrame:
             self.set_current_app(ClockApp.name)
         # In morning switch to images
         elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, ClockApp):
-            self.set_current_app(LoopImagesApp.name)
+            self.set_current_app(GifPlayerApp.name)
     
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
