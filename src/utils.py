@@ -10,7 +10,7 @@ def width_height_from_filename(filename: str):
 def fps_from_filename(filename: str):
     # Check for "\d\dfps" pattern in the filename
     # If detected the number is used a fps value
-    fps = search("(\d\d)fps", filename)
+    fps = search("(\d?\d)fps", filename)
     if fps:
         return int(fps.group(1))
     else:
