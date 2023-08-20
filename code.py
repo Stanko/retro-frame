@@ -82,7 +82,7 @@ class RetroFrame:
         self.current_app.draw_frame()
         self.network.connect()
         self.real_time.check_for_time_sync()
-        self.set_current_app(ClockApp.name)
+        self.set_current_app(GifPlayerApp.name)
         while True:
             # print(f"Current available memory: {gc.mem_free()} bytes")
             gc.collect()

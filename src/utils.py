@@ -16,14 +16,6 @@ def fps_from_filename(filename: str):
     else:
         return None
 
-def width_height_from_bitmap(bitmap):
-    # Detect sprite orientation
-    # if there is no size in the filename, each frame is considered to be a square
-    if (bitmap.height > bitmap.width):
-        return bitmap.width, bitmap.width
-    else:
-        return bitmap.height, bitmap.height
-
 def frame_count_from_bitmap(bitmap):
     # Detect sprite orientation
     # if there is no size in the filename, each frame is considered to be a square
@@ -40,6 +32,7 @@ def offset_from_width_height(width: int, height: int):
 def compute_dimensions_and_offset(bitmap, filename: str):
     width, height = width_height_from_filename(filename)
     if width is None:
-        width, height = width_height_from_bitmap(bitmap)
+        width = bitmap.width
+        height = bitmap.height
     x_offset, y_offset = offset_from_width_height(width, height)
     return width, height, x_offset, y_offset
