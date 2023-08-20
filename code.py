@@ -71,6 +71,7 @@ class RetroFrame:
         hour, minute, second = now.tm_hour, now.tm_min, now.tm_sec
         # At midnight change to clock
         if hour == 0 and minute == 0 and second == 0 and not isinstance(self.current_app, ClockApp):
+            self.real_time.sync_time_online()
             self.set_current_app(ClockApp.name)
         # In morning switch to images
         elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, ClockApp):
