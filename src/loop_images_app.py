@@ -1,5 +1,4 @@
 import time
-from re import search
 
 from displayio import OnDiskBitmap, TileGrid
 
