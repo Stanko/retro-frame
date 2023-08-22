@@ -3,3 +3,5 @@ node_modules
 secrets.py
 .vscode
 tmp
+copy.bat
+backup
