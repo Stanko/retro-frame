@@ -7,10 +7,9 @@ from src.base_app import BaseApp
 
 class ClockApp(BaseApp):
     name = "Clock"
-    def __init__(self, display, network, real_time_clock):
+    def __init__(self, display, real_time_clock):
         super().__init__()
         self.display = display
-        self.network = network
         self.real_time_clock = real_time_clock
         self.separator_tile_index = 246
         self.twelve_hour: bool = False
