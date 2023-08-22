@@ -11,6 +11,7 @@ from src.gif_player_app import GifPlayerApp
 from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
+from src.analogue_clock_app import AnalogueClockApp
 
 
 class RetroFrame:
@@ -43,8 +44,9 @@ class RetroFrame:
         # Dictonary order is irrelevant, it will be sorted when switching apps
         self.apps = {
             LoopImagesApp.name: lambda: LoopImagesApp(self.bmp_file_list, self.display),
-            ClockApp.name: lambda: ClockApp(self.display, self.network, self.real_time),
+            ClockApp.name: lambda: ClockApp(self.display, self.real_time),
             GifPlayerApp.name: lambda: GifPlayerApp(self.gif_file_list, self.display),
+            AnalogueClockApp.name: lambda: AnalogueClockApp(self.display, self.real_time),
         }
 
     def next_app(self):
