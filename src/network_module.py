@@ -1,16 +1,18 @@
 import gc
-import adafruit_requests as requests
+
 import adafruit_esp32spi.adafruit_esp32spi_socket as socket
-from digitalio import DigitalInOut
+import adafruit_requests as requests
 import board
 import busio
 from adafruit_esp32spi import adafruit_esp32spi
+from digitalio import DigitalInOut
 
 try:
     from secrets import secrets
 except ImportError:
     print('WiFi secrets are kept in secrets.py, please add them there!')
     raise
+
 
 class NetworkModule:
     def __init__(self, skip_connection: bool = False):
@@ -44,14 +46,14 @@ class NetworkModule:
             socket.set_interface(self.esp)
             requests.set_socket(socket, self.esp)
             gc.collect()
-    
+
     def disconnect(self) -> None:
         if not self.skip_connection:
             print("Disconnecting from WiFi...")
             self.esp.disconnect()
             self.esp = None
             gc.collect()
-    
+
     def get_json(self, url: str):
         if not self.is_connected():
             self.connect()

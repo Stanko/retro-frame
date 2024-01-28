@@ -7,6 +7,7 @@ from src.base_app import BaseApp
 
 class ClockApp(BaseApp):
     name = "Clock"
+
     def __init__(self, display, real_time_clock):
         super().__init__()
         self.display = display
@@ -15,7 +16,7 @@ class ClockApp(BaseApp):
         self.twelve_hour: bool = False
         self.last_time_string: str = ""
         self.create_clock_sprite()
-    
+
     def create_clock_sprite(self):
         self.display.clear()
 
@@ -57,7 +58,7 @@ class ClockApp(BaseApp):
         self.display.sprite_group[2][0] = 40
         self.display.sprite_group[3][0] = 40
         self.display.sprite_group[4][0] = 40
-    
+
     def hh_mm(self, time_struct):
         if self.twelve_hour:
             if time_struct.tm_hour > 12:
@@ -98,4 +99,3 @@ class ClockApp(BaseApp):
                     # sprite has 4 sets of digits
                     self.display.sprite_group[index + 1][0] = digit_int + (index * 10)
         return 0.1
-    

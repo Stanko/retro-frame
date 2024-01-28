@@ -1,10 +1,11 @@
+import math
 import time
-from adafruit_display_text import label
+from collections import namedtuple
+
+import terminalio
 from adafruit_display_shapes.circle import Circle
 from adafruit_display_shapes.line import Line
-import terminalio
-import math
-from collections import namedtuple
+from adafruit_display_text import label
 
 Angles = namedtuple("Angles", ("hour", "minute", "second"))
 Point = namedtuple("Point", ("x", "y"))
@@ -12,6 +13,7 @@ Point = namedtuple("Point", ("x", "y"))
 
 class AnalogueClockApp:
     name = "AnalogueClock"
+
     def __init__(self, display, real_time_clock):
         self.display = display
         self.real_time_clock = real_time_clock
@@ -68,11 +70,11 @@ class AnalogueClockApp:
         hours_coords = self.point_on_circle(angles.hour, self.hour_hand_radius)
         minutes_coords = self.point_on_circle(angles.minute, self.minute_hand_radius)
         seconds_coords = self.point_on_circle(angles.second, self.second_hand_radius)
-        
+
         self.hours_hand = Line(self.origin_x, self.origin_y, hours_coords.x, hours_coords.y, color=self.hour_hand_color)
         self.minutes_hand = Line(self.origin_x, self.origin_y, minutes_coords.x, minutes_coords.y, color=self.minute_hand_color)
         self.seconds_hand = Line(self.origin_x, self.origin_y, seconds_coords.x, seconds_coords.y, color=self.second_hand_color)
-        
+
         self.display.sprite_group[-3] = self.hours_hand
         self.display.sprite_group[-2] = self.minutes_hand
         self.display.sprite_group[-1] = self.seconds_hand

@@ -3,11 +3,13 @@ import time
 from displayio import OnDiskBitmap, TileGrid
 
 from src.base_app import BaseApp
-from src.utils import compute_dimensions_and_offset, fps_from_filename, frame_count_from_bitmap
+from src.utils import (compute_dimensions_and_offset, fps_from_filename,
+                       frame_count_from_bitmap)
 
 
 class LoopImagesApp(BaseApp):
     name = "Loop"
+
     def __init__(self, filepaths, display, loop_time_seconds=300):
         super().__init__()
         self.filepaths = filepaths
@@ -24,7 +26,7 @@ class LoopImagesApp(BaseApp):
         self.current_image_index = (self.current_image_index + 1) % len(self.filepaths)
         self.current_frame = 0
         self.load_image()
-    
+
     def load_image(self):
         if len(self.filepaths) == 0:
             return
@@ -65,7 +67,7 @@ class LoopImagesApp(BaseApp):
 
     def handle_button_down(self):
         self.change_image()
-    
+
     def draw_frame(self) -> float:
         if len(self.filepaths) == 0:
             return 0.1
