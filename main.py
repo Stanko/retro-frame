@@ -4,6 +4,7 @@ from os import listdir
 
 from board import BUTTON_DOWN, BUTTON_UP
 
+from src.accelerometer_module import AccelerometerModule, Axis
 from src.analogue_clock_app import AnalogueClockApp
 from src.button_module import ButtonModule
 from src.clock_app import ClockApp
@@ -20,6 +21,7 @@ class RetroFrame:
         self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
+        self.accelerometer: AccelerometerModule = AccelerometerModule()
         self.network: NetworkModule = NetworkModule(skip_connection=skip_connection)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, skip_connection)
 
@@ -53,6 +55,12 @@ class RetroFrame:
         app_list = sorted(self.apps.keys())
         current_app_index = app_list.index(self.current_app.name)
         current_app_index = (current_app_index + 1) % len(app_list)
+        self.set_current_app(app_list[current_app_index])
+
+    def previous_app(self):
+        app_list = sorted(self.apps.keys())
+        current_app_index = app_list.index(self.current_app.name)
+        current_app_index = (current_app_index - 1) % len(app_list)
         self.set_current_app(app_list[current_app_index])
 
     def set_current_app(self, name: str):
@@ -95,11 +103,25 @@ class RetroFrame:
             if self.button_up.is_pressed():
                 self.next_app()
 
+            # Handle button down - propagate the event to the current app
             if self.button_down.is_pressed():
                 self.current_app.handle_button_down()
 
+            # Handle accelerometer X axis - change app
+            if self.accelerometer.check_next_by_axis(Axis.X):
+                self.next_app()
+            if self.accelerometer.check_previous_by_axis(Axis.X):
+                self.previous_app()
+
+            # Handle accelerometer Z axis - propagate the event to the current app
+            if self.accelerometer.check_next_by_axis(Axis.Z):
+                self.current_app.handle_accelerometer_z_next()
+            if self.accelerometer.check_previous_by_axis(Axis.Z):
+                self.current_app.handle_accelerometer_z_previous()
+
             sleep_duration = self.current_app.draw_frame()
             time.sleep(sleep_duration)
+
 
 frame = RetroFrame("/bmp", "/gif", skip_connection=False)
 frame.run()

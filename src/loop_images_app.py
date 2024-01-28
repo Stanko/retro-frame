@@ -22,8 +22,13 @@ class LoopImagesApp(BaseApp):
 
         self.load_image()
 
-    def change_image(self):
+    def next_image(self):
         self.current_image_index = (self.current_image_index + 1) % len(self.filepaths)
+        self.current_frame = 0
+        self.load_image()
+
+    def previous_image(self):
+        self.current_image_index = (self.current_image_index - 1) % len(self.filepaths)
         self.current_frame = 0
         self.load_image()
 
@@ -66,7 +71,7 @@ class LoopImagesApp(BaseApp):
         self.current_frame = 0
 
     def handle_button_down(self):
-        self.change_image()
+        self.next_image()
 
     def draw_frame(self) -> float:
         if len(self.filepaths) == 0:
@@ -76,5 +81,11 @@ class LoopImagesApp(BaseApp):
         if self.current_frame == 0:
             # Image has been looping for max time, switch to the next one
             if (time.time() - self.loop_started_time) > self.loop_time_seconds:
-                self.change_image()
+                self.next_image()
         return self.frame_duration_in_s
+
+    def handle_accelerometer_z_next(self) -> None:
+        self.next_image()
+
+    def handle_accelerometer_z_previous(self) -> None:
+        self.previous_image()

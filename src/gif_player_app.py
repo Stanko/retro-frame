@@ -1,5 +1,4 @@
 import time
-from re import search
 
 import displayio
 import gifio
@@ -58,6 +57,10 @@ class GifPlayerApp(BaseApp):
         self.current_image_index = (self.current_image_index + 1) % len(self.filepaths)
         self.load_gif()
 
+    def previous_gif(self):
+        self.current_image_index = (self.current_image_index - 1) % len(self.filepaths)
+        self.load_gif()
+
     def handle_button_down(self) -> None:
         self.next_gif()
 
@@ -74,3 +77,9 @@ class GifPlayerApp(BaseApp):
             return suggested
         else:
             return float(1 / self.fps)
+
+    def handle_accelerometer_z_next(self) -> None:
+        self.next_gif()
+
+    def handle_accelerometer_z_previous(self) -> None:
+        self.previous_gif()
