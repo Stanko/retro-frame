@@ -1,9 +1,10 @@
+import gc
 import time
 from os import listdir
-import gc
 
 from board import BUTTON_DOWN, BUTTON_UP
 
+from src.analogue_clock_app import AnalogueClockApp
 from src.button_module import ButtonModule
 from src.clock_app import ClockApp
 from src.display_module import DisplayModule
@@ -11,7 +12,6 @@ from src.gif_player_app import GifPlayerApp
 from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
-from src.analogue_clock_app import AnalogueClockApp
 
 
 class RetroFrame:
@@ -73,7 +73,7 @@ class RetroFrame:
         hour, minute, second = now.tm_hour, now.tm_min, now.tm_sec
         # At midnight change to clock
         if hour == 0 and minute == 0 and second == 0 and not isinstance(self.current_app, ClockApp):
-            self.set_current_app(ClockApp.name)
+            self.set_current_app(AnalogueClockApp.name)
         # In morning switch to images
         elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, ClockApp):
             self.set_current_app(GifPlayerApp.name)
