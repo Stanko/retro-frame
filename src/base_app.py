@@ -1,5 +1,6 @@
 class BaseApp:
     name = "BaseApp"
+
     def __init__(self):
         pass
 

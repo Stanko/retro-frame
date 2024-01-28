@@ -1,7 +1,8 @@
-import gifio
 import time
-import displayio
 from re import search
+
+import displayio
+import gifio
 
 from src.base_app import BaseApp
 from src.utils import compute_dimensions_and_offset, fps_from_filename
@@ -9,6 +10,7 @@ from src.utils import compute_dimensions_and_offset, fps_from_filename
 
 class GifPlayerApp(BaseApp):
     name = "GifPlayer"
+
     def __init__(self, filepaths, display, loop_time_seconds=300):
         super().__init__()
         self.filepaths = filepaths
@@ -21,7 +23,7 @@ class GifPlayerApp(BaseApp):
         self.fps = None
 
         self.load_gif()
-    
+
     def load_gif(self):
         if len(self.filepaths) == 0:
             return

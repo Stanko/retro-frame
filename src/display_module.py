@@ -9,11 +9,11 @@ class DisplayModule:
         self.matrix = Matrix(width=width, height=height, bit_depth=bit_depth)
         self.sprite_group = Group()
         self.matrix.display.show(self.sprite_group)
-    
+
     def clear(self) -> None:
         while self.sprite_group:
             self.sprite_group.pop()
         gc.collect()
-    
+
     def draw(self, sprite: TileGrid) -> None:
         self.sprite_group.append(sprite)

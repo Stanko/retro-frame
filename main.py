@@ -23,7 +23,7 @@ class RetroFrame:
         self.network: NetworkModule = NetworkModule(skip_connection=skip_connection)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, skip_connection)
 
-        self.bmp_folder =bmp_folder
+        self.bmp_folder = bmp_folder
         self.bmp_file_list = sorted(
             [
                 f"{self.bmp_folder}/{f}"
@@ -54,7 +54,7 @@ class RetroFrame:
         current_app_index = app_list.index(self.current_app.name)
         current_app_index = (current_app_index + 1) % len(app_list)
         self.set_current_app(app_list[current_app_index])
-    
+
     def set_current_app(self, name: str):
         if name in self.apps.keys():
             # Clear reference before loading new app to allow GC to clean up
@@ -77,7 +77,7 @@ class RetroFrame:
         # In morning switch to images
         elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, ClockApp):
             self.set_current_app(GifPlayerApp.name)
-    
+
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
         self.current_app = LoopImagesApp(["./splash.bmp"], self.display)
@@ -94,10 +94,10 @@ class RetroFrame:
             # Handle button up - change app
             if self.button_up.is_pressed():
                 self.next_app()
-            
+
             if self.button_down.is_pressed():
                 self.current_app.handle_button_down()
-            
+
             sleep_duration = self.current_app.draw_frame()
             time.sleep(sleep_duration)
 

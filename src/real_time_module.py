@@ -6,12 +6,13 @@ from rtc import RTC
 class RealTimeClockModule:
     seconds_in_minute = 60
     minutes_in_hour = 60
+
     def __init__(self, network, skip_connection):
         self.network = network
         self.skip_connection = skip_connection
         self.last_sync = None
         self.update_frequency = (self.seconds_in_minute * self.minutes_in_hour * 5) # 5 hours
-    
+
     def _parse_time(self, timestring):
         # Separate into date and time
         # YYYY-MM-DD
@@ -53,4 +54,3 @@ class RealTimeClockModule:
         # Sync with time server if we haven't synced yet or every `update_frequency` seconds
         if self.last_sync is None or (time.time() - self.last_sync) > self.update_frequency:
             self.sync_time_online()
-
