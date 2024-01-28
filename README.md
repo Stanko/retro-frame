@@ -20,7 +20,7 @@ The brain is [Adafruit MatrixPortal M4](https://www.adafruit.com/product/4745), 
 
 Files you'll need to copy to your MatrixPortal are:
 
-- `code.py`
+- `main.py` and rename to `code.py` (see `copy.bat|sh`)
 - `lib`
 - `clock/sprite.bmp`
 - `secrets.py` (rename `secrets-example.py` and add your network name and password)
