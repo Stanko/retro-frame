@@ -10,6 +10,14 @@ class BaseApp:
     def handle_button_down(self) -> None:
         raise Exception(f"Handle button down not implemented for app {self.name}")
 
+    def handle_accelerometer_z_next(self) -> None:
+        print(f"Handle accelerometer z next not implemented for app {self.name}")
+        return
+
+    def handle_accelerometer_z_previous(self) -> None:
+        print(f"Handle accelerometer z previous not implemented for app {self.name}")
+        return
+
     # When you print an object from BaseApp it will print its internal state
     def __repr__(self):
         return " ".join([f"{key}={self.__dict__[key]}" for key in self.__dict__])
