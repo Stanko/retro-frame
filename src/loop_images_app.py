@@ -47,7 +47,7 @@ class LoopImagesApp(BaseApp):
         else:
             self.frame_duration_in_s = 0.1
 
-        tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(bitmap, filename)
+        tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(bitmap)
         self.frame_count = frame_count_from_bitmap(bitmap)
         # print("filename", filename)
         # print("width", tile_width, "height", tile_height)

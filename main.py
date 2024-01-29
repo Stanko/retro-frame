@@ -14,10 +14,9 @@ from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
 
-
 class RetroFrame:
     """Container class for all modules and apps."""
-    def __init__(self, bmp_folder: str = "/bmp", gif_folder: str = "/gif", skip_connection: bool = False):
+    def __init__(self, gif_folder: str = "/gif", skip_connection: bool = False):
         self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
@@ -25,14 +24,6 @@ class RetroFrame:
         self.network: NetworkModule = NetworkModule(skip_connection=skip_connection)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, skip_connection)
 
-        self.bmp_folder = bmp_folder
-        self.bmp_file_list = sorted(
-            [
-                f"{self.bmp_folder}/{f}"
-                for f in listdir(self.bmp_folder)
-                if (f.endswith(".bmp") and not f.startswith("."))
-            ]
-        )
         self.gif_folder = gif_folder
         self.gif_file_list = sorted(
             [
@@ -45,7 +36,6 @@ class RetroFrame:
         # Store anonymous functions that return app objects to preserve memory
         # Dictonary order is irrelevant, it will be sorted when switching apps
         self.apps = {
-            LoopImagesApp.name: lambda: LoopImagesApp(self.bmp_file_list, self.display),
             ClockApp.name: lambda: ClockApp(self.display, self.real_time),
             GifPlayerApp.name: lambda: GifPlayerApp(self.gif_file_list, self.display),
             AnalogueClockApp.name: lambda: AnalogueClockApp(self.display, self.real_time),
@@ -79,19 +69,24 @@ class RetroFrame:
     def check_for_scheduled_app_switch(self):
         now = time.localtime()
         hour, minute, second = now.tm_hour, now.tm_min, now.tm_sec
-        # At midnight change to clock
+
+     # At midnight change to clock
         if hour == 0 and minute == 0 and second == 0 and not isinstance(self.current_app, ClockApp):
             self.set_current_app(AnalogueClockApp.name)
         # In morning switch to images
-        elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, ClockApp):
+        elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, GifPlayerApp):
             self.set_current_app(GifPlayerApp.name)
 
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
+
+        # Load splash screen before connecting to the network
         self.current_app = LoopImagesApp(["./splash.bmp"], self.display)
         self.current_app.draw_frame()
+        # Connect to the network and sync time
         self.network.connect()
         self.real_time.check_for_time_sync()
+        # Switch to the gif player app
         self.set_current_app(GifPlayerApp.name)
         while True:
             # print(f"Current available memory: {gc.mem_free()} bytes")
@@ -123,5 +118,5 @@ class RetroFrame:
             time.sleep(sleep_duration)
 
 
-frame = RetroFrame("/bmp", "/gif", skip_connection=False)
+frame = RetroFrame("/gif", skip_connection=False)
 frame.run()
