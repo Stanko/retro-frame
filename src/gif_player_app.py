@@ -37,7 +37,7 @@ class GifPlayerApp(BaseApp):
         self.current_gif = gifio.OnDiskGif(image_path)
         self.fps = fps_from_filename(filename)
 
-        tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(self.current_gif.bitmap, filename)
+        tile_width, tile_height, x_offset, y_offset = compute_dimensions_and_offset(self.current_gif.bitmap)
         sprite = displayio.TileGrid(
             self.current_gif.bitmap,
             pixel_shader=displayio.ColorConverter(input_colorspace=displayio.Colorspace.RGB565_SWAPPED),
