@@ -22,7 +22,7 @@ class AccelerometerModule:
         # Set range of accelerometer (can be RANGE_2_G, RANGE_4_G, RANGE_8_G or RANGE_16_G).
         self.lis3dh.range = adafruit_lis3dh.RANGE_2_G
 
-        self.deadzone = 0.05
+        self.deadzone = 0.1
         self.wait_for_reset = False
         self.rotation_threshold = 0.3
 
