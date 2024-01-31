@@ -1,0 +1,3 @@
+[TYPECHECK]
+
+ignored-modules=displayio,gifio,adafruit_lis3dh,board,busio,digitalio,terminalio,adafruit_display_shapes,adafruit_display_text,adafruit_debouncer,adafruit_matrixportal,adafruit_esp32spi,adafruit_requests,rtc
