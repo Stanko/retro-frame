@@ -4,15 +4,18 @@ from os import listdir
 
 from board import BUTTON_DOWN, BUTTON_UP
 
+# Modules
 from src.accelerometer_module import AccelerometerModule, Axis
-from src.analogue_clock_app import AnalogueClockApp
 from src.button_module import ButtonModule
-from src.clock_app import ClockApp
 from src.display_module import DisplayModule
-from src.gif_player_app import GifPlayerApp
-from src.loop_images_app import LoopImagesApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
+
+# Apps
+from src.analogue_clock_app import AnalogueClockApp
+from src.clock_app import ClockApp
+from src.gif_player_app import GifPlayerApp
+from src.splash_app import SplashApp
 
 class RetroFrame:
     """Container class for all modules and apps."""
@@ -81,7 +84,7 @@ class RetroFrame:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
 
         # Load splash screen before connecting to the network
-        self.current_app = LoopImagesApp(["./splash.bmp"], self.display)
+        self.current_app = SplashApp(self.display, None, { "image_path": "/splash.bmp" })
         self.current_app.draw_frame()
         # Connect to the network and sync time
         self.network.connect()
@@ -118,5 +121,5 @@ class RetroFrame:
             time.sleep(sleep_duration)
 
 
-frame = RetroFrame("/gif", skip_connection=False)
+frame = RetroFrame("/gif", skip_connection=True)
 frame.run()
