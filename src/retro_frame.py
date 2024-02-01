@@ -7,15 +7,11 @@ from board import BUTTON_DOWN, BUTTON_UP
 from src.accelerometer_module import AccelerometerModule, Axis
 
 # Apps
-from src.analogue_clock_app import AnalogueClockApp
 from src.button_module import ButtonModule
-from src.clock_app import ClockApp
 from src.display_module import DisplayModule
-from src.gif_player_app import GifPlayerApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
 from src.settings import settings
-from src.settings_utils import AppSettings
 from src.splash_app import SplashApp
 
 
