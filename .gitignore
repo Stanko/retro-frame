@@ -5,3 +5,4 @@ secrets.py
 tmp
 copy.bat
 backup
+src/settings.py
