@@ -56,7 +56,8 @@ class RetroFrame:
 
         for i, app in enumerate(settings.apps):
             if (
-                hour == app.time["hour"]
+                app.time is not None
+                and hour == app.time["hour"]
                 and minute == app.time["minute"]
                 and second == 0
                 and self.current_app_index != i
