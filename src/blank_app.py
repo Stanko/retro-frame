@@ -8,4 +8,4 @@ class BlankApp(BaseApp):
         display.clear()
 
     def draw_frame(self) -> float:
-        return 1
+        return 0.5

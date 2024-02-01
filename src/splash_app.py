@@ -10,9 +10,6 @@ class SplashApp(BaseApp):
         self.image_path = settings['image_path']
         self.display = display
 
-        # TODO maybe move it to the base app if possible
-        self.display.clear()
-
         bitmap = OnDiskBitmap(open(self.image_path, "rb"))
 
         # Splash screen should always be 64x64
@@ -29,7 +26,4 @@ class SplashApp(BaseApp):
 
     def draw_frame(self) -> float:
         self.display.draw(self.sprite)
-        return 1
-
-    def handle_button_down(self) -> None:
-        return
+        return 0.1
