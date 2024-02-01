@@ -8,7 +8,8 @@ class BaseApp:
         raise Exception(f"Draw frame function is not implemented for app {self.name}")
 
     def handle_button_down(self) -> None:
-        raise Exception(f"Handle button down not implemented for app {self.name}")
+        print(f"Handle button down not implemented for app {self.name}")
+        return
 
     def handle_accelerometer_z_next(self) -> None:
         print(f"Handle accelerometer z next not implemented for app {self.name}")
