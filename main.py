@@ -36,32 +36,37 @@ class RetroFrame:
 
     def next_app(self):
         self.current_app_index = (self.current_app_index + 1) % len(settings.apps)
-        self.set_current_app(settings.apps[self.current_app_index])
+        self.set_current_app(self.current_app_index)
 
     def previous_app(self):
         self.current_app_index = (self.current_app_index - 1) % len(settings.apps)
-        self.set_current_app(settings.apps[self.current_app_index])
+        self.set_current_app(self.current_app_index)
 
-    def set_current_app(self, new_active_app: AppSettings):
+    def set_current_app(self, new_app_index: int):
         # Clear reference before loading new app to allow GC to clean up
         # old_app_name = self.current_app.name if self.current_app else None
         # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
         self.current_app = None
+        self.current_app_index = new_app_index
         self.display.clear()
         # print(f"Memory usage after unloading {old_app_name}: {gc.mem_free()} bytes")
-        self.current_app = new_active_app.app(self.display, self.modules, new_active_app.settings)
+        new_app = settings.apps[new_app_index]
+        self.current_app = new_app.app(self.display, self.modules, new_app.settings)
         # print(f"Available memory after loading {self.current_app.name}: {gc.mem_free()} bytes")
 
     def check_for_scheduled_app_switch(self):
         now = time.localtime()
         hour, minute, second = now.tm_hour, now.tm_min, now.tm_sec
 
-        # At midnight change to clock
-        if hour == 0 and minute == 0 and second == 0 and not isinstance(self.current_app, ClockApp):
-            self.set_current_app(AnalogueClockApp.name)
-        # In morning switch to images
-        elif hour == 9 and minute == 0 and second == 0 and isinstance(self.current_app, GifPlayerApp):
-            self.set_current_app(GifPlayerApp.name)
+        for i, app in enumerate(settings.apps):
+            if (
+                hour == app.time["hour"]
+                and minute == app.time["minute"]
+                and second == 0
+                and self.current_app_index != i
+            ):
+                self.set_current_app(i)
+                break
 
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
@@ -72,7 +77,7 @@ class RetroFrame:
         self.network.connect()
         self.real_time.check_for_time_sync()
         # Switch to the gif player app
-        self.set_current_app(settings.apps[self.current_app_index])
+        self.set_current_app(self.current_app_index)
         while True:
             # print(f"Current available memory: {gc.mem_free()} bytes")
             gc.collect()

@@ -99,3 +99,9 @@ class ClockApp(BaseApp):
                     # sprite has 4 sets of digits
                     self.display.sprite_group[index + 1][0] = digit_int + (index * 10)
         return 0.1
+
+    def handle_accelerometer_z_next(self):
+        self.twelve_hour = not self.twelve_hour
+
+    def handle_accelerometer_z_previous(self):
+        self.twelve_hour = not self.twelve_hour
