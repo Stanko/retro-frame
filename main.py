@@ -6,28 +6,31 @@ from board import BUTTON_DOWN, BUTTON_UP
 
 # Modules
 from src.accelerometer_module import AccelerometerModule, Axis
-from src.button_module import ButtonModule
-from src.display_module import DisplayModule
-from src.network_module import NetworkModule
-from src.real_time_module import RealTimeClockModule
 
 # Apps
 from src.analogue_clock_app import AnalogueClockApp
+from src.button_module import ButtonModule
 from src.clock_app import ClockApp
+from src.display_module import DisplayModule
 from src.gif_player_app import GifPlayerApp
+from src.network_module import NetworkModule
+from src.real_time_module import RealTimeClockModule
+from src.settings import settings
 from src.splash_app import SplashApp
+
 
 class RetroFrame:
     """Container class for all modules and apps."""
-    def __init__(self, gif_folder: str = "/gif", skip_connection: bool = False):
+
+    def __init__(self):
         self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
         self.accelerometer: AccelerometerModule = AccelerometerModule()
-        self.network: NetworkModule = NetworkModule(skip_connection=skip_connection)
-        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, skip_connection)
+        self.network: NetworkModule = NetworkModule(settings.wifi)
+        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network)
 
-        self.gif_folder = gif_folder
+        self.gif_folder = "/gif"
         self.gif_file_list = sorted(
             [
                 f"{self.gif_folder}/{f}"
@@ -73,7 +76,7 @@ class RetroFrame:
         now = time.localtime()
         hour, minute, second = now.tm_hour, now.tm_min, now.tm_sec
 
-     # At midnight change to clock
+        # At midnight change to clock
         if hour == 0 and minute == 0 and second == 0 and not isinstance(self.current_app, ClockApp):
             self.set_current_app(AnalogueClockApp.name)
         # In morning switch to images
@@ -84,7 +87,7 @@ class RetroFrame:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
 
         # Load splash screen before connecting to the network
-        self.current_app = SplashApp(self.display, None, { "image_path": "/splash.bmp" })
+        self.current_app = SplashApp(self.display, None, {"image_path": "/splash.bmp"})
         self.current_app.draw_frame()
         # Connect to the network and sync time
         self.network.connect()
@@ -121,5 +124,5 @@ class RetroFrame:
             time.sleep(sleep_duration)
 
 
-frame = RetroFrame("/gif", skip_connection=True)
+frame = RetroFrame()
 frame.run()

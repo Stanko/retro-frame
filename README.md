@@ -23,7 +23,7 @@ Files you'll need to copy to your MatrixPortal are:
 - `main.py` and rename to `code.py` (see `copy.bat|sh`)
 - `lib`
 - `clock/sprite.bmp`
-- `secrets.py` (rename `secrets-example.py` and add your network name and password)
+- `src/settings_example.py` (rename `src/settings.py` and add your network name, password, and skip_connection=False)
 - `bmp` (pick and choose animation sprites you like)
 
 ## Modes
