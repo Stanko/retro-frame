@@ -1,3 +1,4 @@
+import os
 import time
 
 import displayio
@@ -10,15 +11,17 @@ from src.utils import compute_dimensions_and_offset, fps_from_filename
 class GifPlayerApp(BaseApp):
     name = "GifPlayer"
 
-    def __init__(self, filepaths, display, loop_time_seconds=300):
-        super().__init__()
-        self.filepaths = filepaths
-        self.display = display
+    def __init__(self, display, modules, settings):
+        super().__init__(display, modules, settings)
+        gif_folder = settings["gif_folder"]
+        self.filepaths = sorted(
+            [f"{gif_folder}/{f}" for f in os.listdir(gif_folder) if (f.endswith(".gif") and not f.startswith("."))]
+        )
         self.current_image_index = 0
         self.current_frame = 0
         self.current_gif = None
         self.current_git_start_time = None
-        self.loop_time_seconds = loop_time_seconds
+        self.loop_time_seconds = settings["loop_time_seconds"]
         self.fps = None
 
         self.load_gif()

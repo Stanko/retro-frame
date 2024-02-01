@@ -7,23 +7,26 @@ from adafruit_display_shapes.circle import Circle
 from adafruit_display_shapes.line import Line
 from adafruit_display_text import label
 
+from src.base_app import BaseApp
+
 Angles = namedtuple("Angles", ("hour", "minute", "second"))
 Point = namedtuple("Point", ("x", "y"))
 
 
-class AnalogueClockApp:
+class AnalogueClockApp(BaseApp):
     name = "AnalogueClock"
 
-    def __init__(self, display, real_time_clock):
+    def __init__(self, display, modules, settings):
+        super().__init__(display, modules, settings)
         self.display = display
-        self.real_time_clock = real_time_clock
+        self.real_time_clock = modules["real_time"]
         self.font = terminalio.FONT
-        self.outline_color = 0xffffff
+        self.outline_color = 0xFFFFFF
         self.fill_color = 0x000000
-        self.hour_hand_color = 0xe38e05
-        self.minute_hand_color = 0xe38e05
-        self.second_hand_color = 0xff0000
-        self.numbers_color = 0xffffff
+        self.hour_hand_color = 0xE38E05
+        self.minute_hand_color = 0xE38E05
+        self.second_hand_color = 0xFF0000
+        self.numbers_color = 0xFFFFFF
         self.origin_x = 32
         self.origin_y = 32
         self.radius = 30
@@ -58,9 +61,9 @@ class AnalogueClockApp:
         return Point(round(x), round(y))
 
     def compute_angles(self, now) -> Angles:
-        hour_angle = ((now.tm_hour * 30) % 360)
-        minute_angle = ((now.tm_min * 6) % 360)
-        second_angle = ((now.tm_sec * 6) % 360)
+        hour_angle = (now.tm_hour * 30) % 360
+        minute_angle = (now.tm_min * 6) % 360
+        second_angle = (now.tm_sec * 6) % 360
         return Angles(hour_angle, minute_angle, second_angle)
 
     def draw_frame(self) -> float:
@@ -72,8 +75,12 @@ class AnalogueClockApp:
         seconds_coords = self.point_on_circle(angles.second, self.second_hand_radius)
 
         self.hours_hand = Line(self.origin_x, self.origin_y, hours_coords.x, hours_coords.y, color=self.hour_hand_color)
-        self.minutes_hand = Line(self.origin_x, self.origin_y, minutes_coords.x, minutes_coords.y, color=self.minute_hand_color)
-        self.seconds_hand = Line(self.origin_x, self.origin_y, seconds_coords.x, seconds_coords.y, color=self.second_hand_color)
+        self.minutes_hand = Line(
+            self.origin_x, self.origin_y, minutes_coords.x, minutes_coords.y, color=self.minute_hand_color
+        )
+        self.seconds_hand = Line(
+            self.origin_x, self.origin_y, seconds_coords.x, seconds_coords.y, color=self.second_hand_color
+        )
 
         self.display.sprite_group[-3] = self.hours_hand
         self.display.sprite_group[-2] = self.minutes_hand

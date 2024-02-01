@@ -1,8 +1,13 @@
+from src.display_module import DisplayModule
+
+
 class BaseApp:
     name = "BaseApp"
 
-    def __init__(self):
-        pass
+    def __init__(self, display: DisplayModule, modules: dict, settings: dict = None):
+        self.display = display
+        self.modules = modules
+        self.settings = settings or {}
 
     def draw_frame(self) -> float:
         raise Exception(f"Draw frame function is not implemented for app {self.name}")

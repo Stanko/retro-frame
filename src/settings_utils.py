@@ -18,7 +18,10 @@ class Settings:
 
 
 class AppSettings:
-    def _init_(self, app, time=None, settings=None):
+    def __init__(self, app, time=None, settings=None):
         self.app = app
         self.time = time
         self.settings = settings
+
+    def __repr__(self) -> str:
+        return f"AppSettings(app={self.app}, time={self.time}, settings={self.settings})"

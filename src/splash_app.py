@@ -2,11 +2,12 @@ from displayio import OnDiskBitmap, TileGrid
 
 from src.base_app import BaseApp
 
+
 class SplashApp(BaseApp):
     name = "Splash"
 
-    def __init__(self, display, modules=None, settings=None):
-        super().__init__()
+    def __init__(self, display, modules, settings):
+        super().__init__(display, modules, settings)
         self.image_path = settings['image_path']
         self.display = display
 
