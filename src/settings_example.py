@@ -11,16 +11,28 @@ settings = Settings(
         ),
         AppSettings(
             app=GifPlayerApp,
-            time='8:30',
+            time={
+              'hour': 8,
+              'minute': 30,
+            },
             settings={
                 'gif_folder': '/gif',
                 'loop_time_seconds': 300,
             },
         ),
-        AppSettings(app=ClockApp, time='23:30', settings={'twelve_hour': False}),
+        AppSettings(
+            app=ClockApp, time={
+                'hour': 23,
+                'minute': 30,
+            },
+            settings={'twelve_hour': False}
+        ),
         AppSettings(
             app=BlankApp,
-            time='0:30',
+            time={
+              'hour': 0,
+              'minute': 30,
+            }
         ),
     ],
     wifi=WifiSettings('SSID_NAME', 'SSDI_PASSWORD', skip_connection=True),
