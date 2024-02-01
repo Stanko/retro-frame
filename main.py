@@ -1,6 +1,5 @@
 import gc
 import time
-from os import listdir
 
 from board import BUTTON_DOWN, BUTTON_UP
 
@@ -16,6 +15,7 @@ from src.gif_player_app import GifPlayerApp
 from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
 from src.settings import settings
+from src.settings_utils import AppSettings
 from src.splash_app import SplashApp
 
 
@@ -29,48 +29,28 @@ class RetroFrame:
         self.accelerometer: AccelerometerModule = AccelerometerModule()
         self.network: NetworkModule = NetworkModule(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network)
+        self.modules = {"real_time": self.real_time}
 
-        self.gif_folder = "/gif"
-        self.gif_file_list = sorted(
-            [
-                f"{self.gif_folder}/{f}"
-                for f in listdir(self.gif_folder)
-                if (f.endswith(".gif") and not f.startswith("."))
-            ]
-        )
         self.current_app = None
-        # Store anonymous functions that return app objects to preserve memory
-        # Dictonary order is irrelevant, it will be sorted when switching apps
-        self.apps = {
-            ClockApp.name: lambda: ClockApp(self.display, self.real_time),
-            GifPlayerApp.name: lambda: GifPlayerApp(self.gif_file_list, self.display),
-            AnalogueClockApp.name: lambda: AnalogueClockApp(self.display, self.real_time),
-        }
+        self.current_app_index = 0
 
     def next_app(self):
-        app_list = sorted(self.apps.keys())
-        current_app_index = app_list.index(self.current_app.name)
-        current_app_index = (current_app_index + 1) % len(app_list)
-        self.set_current_app(app_list[current_app_index])
+        self.current_app_index = (self.current_app_index + 1) % len(settings.apps)
+        self.set_current_app(settings.apps[self.current_app_index])
 
     def previous_app(self):
-        app_list = sorted(self.apps.keys())
-        current_app_index = app_list.index(self.current_app.name)
-        current_app_index = (current_app_index - 1) % len(app_list)
-        self.set_current_app(app_list[current_app_index])
+        self.current_app_index = (self.current_app_index - 1) % len(settings.apps)
+        self.set_current_app(settings.apps[self.current_app_index])
 
-    def set_current_app(self, name: str):
-        if name in self.apps.keys():
-            # Clear reference before loading new app to allow GC to clean up
-            # old_app_name = self.current_app.name if self.current_app else None
-            # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
-            self.current_app = None
-            self.display.clear()
-            # print(f"Memory usage after unloading {old_app_name}: {gc.mem_free()} bytes")
-            self.current_app = self.apps[name]()
-            # print(f"Available memory after loading {self.current_app.name}: {gc.mem_free()} bytes")
-        else:
-            raise ValueError(f"App {name} not found in {self.apps.keys()}")
+    def set_current_app(self, new_active_app: AppSettings):
+        # Clear reference before loading new app to allow GC to clean up
+        # old_app_name = self.current_app.name if self.current_app else None
+        # print(f"Memory usage with {self.current_app.name} loaded: {gc.mem_free()} bytes")
+        self.current_app = None
+        self.display.clear()
+        # print(f"Memory usage after unloading {old_app_name}: {gc.mem_free()} bytes")
+        self.current_app = new_active_app.app(self.display, self.modules, new_active_app.settings)
+        # print(f"Available memory after loading {self.current_app.name}: {gc.mem_free()} bytes")
 
     def check_for_scheduled_app_switch(self):
         now = time.localtime()
@@ -85,7 +65,6 @@ class RetroFrame:
 
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
-
         # Load splash screen before connecting to the network
         self.current_app = SplashApp(self.display, None, {"image_path": "/splash.bmp"})
         self.current_app.draw_frame()
@@ -93,7 +72,7 @@ class RetroFrame:
         self.network.connect()
         self.real_time.check_for_time_sync()
         # Switch to the gif player app
-        self.set_current_app(GifPlayerApp.name)
+        self.set_current_app(settings.apps[self.current_app_index])
         while True:
             # print(f"Current available memory: {gc.mem_free()} bytes")
             gc.collect()

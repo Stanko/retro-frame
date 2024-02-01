@@ -8,12 +8,12 @@ from src.base_app import BaseApp
 class ClockApp(BaseApp):
     name = "Clock"
 
-    def __init__(self, display, real_time_clock):
-        super().__init__()
+    def __init__(self, display, modules, settings):
+        super().__init__(display, modules, settings)
         self.display = display
-        self.real_time_clock = real_time_clock
+        self.real_time_clock = modules["real_time"]
         self.separator_tile_index = 246
-        self.twelve_hour: bool = False
+        self.twelve_hour = settings.get("twelve_hour", False)
         self.last_time_string: str = ""
         self.create_clock_sprite()
 
