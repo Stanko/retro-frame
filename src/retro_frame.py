@@ -68,7 +68,7 @@ class RetroFrame:
     def run(self) -> None:
         # print(f"Available memory before network connection: {gc.mem_free()} bytes")
         # Load splash screen before connecting to the network
-        self.current_app = SplashApp(self.display, None, {"image_path": "/splash.bmp"})
+        self.current_app = SplashApp(self.display, None, {"image_path": "/assets/splash.bmp"})
         self.current_app.draw_frame()
         # Connect to the network and sync time
         self.network.connect()
