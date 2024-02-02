@@ -2,7 +2,7 @@
 
 DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-frame/).
 
-![Retro Frame](retro-frame.jpg)
+![Retro Frame](./docs/retro-frame.jpg)
 
 Check a few more images and videos [here](https://imgur.com/a/cLXGWWd).
 
@@ -20,11 +20,14 @@ The brain is [Adafruit MatrixPortal M4](https://www.adafruit.com/product/4745), 
 
 Files you'll need to copy to your MatrixPortal are:
 
-- `main.py` and rename to `code.py` (see `copy.bat|sh`)
-- `lib`
-- `clock/sprite.bmp`
-- `src/settings_example.py` (rename `src/settings.py` and add your network name, password, and skip_connection=False)
-- `bmp` (pick and choose animation sprites you like)
+- rename `src/settings_example.py` to `src/settings.py` and add your network name, password, and `skip_connection=False`
+
+Copy following files and folders:
+
+- `code.py` and `src/*.py` (see `copy.bat|sh`)
+- `firmware/[current_version]/lib` to `lib`
+- `assets` (includes splash screen and digital clock sprite)
+- `gif` (pick and choose animation you like)
 
 ## Modes
 
@@ -37,7 +40,7 @@ Button `up` will cycle between these three modes. Button `down` will change betw
 
 By default, at midnight frame will switch to the clock mode and go back to the slideshow mode at nine in the morning.
 
-![Retro Frame in clock mode](retro-frame-clock.jpg)
+![Retro Frame in clock mode](./docs/retro-frame-clock.jpg)
 
 ## List of parts
 
@@ -51,7 +54,7 @@ This is a list of all of the main parts with the links to the ones I used.
 - Buttons - https://www.aliexpress.com/item/4000043687021.html
 - USB C cable - https://www.aliexpress.com/item/1005002105030431.html
 
-![Retro Frame internals](retro-frame-internals.jpg)
+![Retro Frame internals](./docs/retro-frame-internals.jpg)
 
 ## Art credits
 
@@ -64,11 +67,10 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Dota emojis (diretide, giff, es)](https://dota2.fandom.com/wiki/Emoticons)
 - Earth and Moon - generated using wonderful [PixelPlanets](https://github.com/Deep-Fold/PixelPlanets)
 - [Ember Spirit](https://33.media.tumblr.com/3f53a2565f16799b155d33072ef5fca0/tumblr_nalmwaJGah1sgajexo2_250.gif)
+- [Firepit](https://old.reddit.com/r/warcraft3/comments/f3b6fw/warcraft_2_footman_remaster/)
 - [Fox](https://elthen.itch.io/2d-pixel-art-fox-sprites)
-- [Haunted pumpkin](https://pixeljoint.com/pixelart/25807.htm)
 - [Hollow Knight](https://www.deviantart.com/haykira/art/Hallownest-Fellas-841502305)
 - [Jim](https://hani-amir.com/blog/2017/2/7/pixel-art-animation-basics-5-classic-side-scrolling-walking-running-animations-from-the-snes-era)
-- [Jumping pumpkin](https://pixeljoint.com/pixelart/15445.htm)
 - [Link](https://www.deviantart.com/world-of-noel/art/Linked-Seasons-Link-361192040)
 - [Madeline](https://rephil.dribbble.com/)
 - [Mario chase](https://rephil.dribbble.com/)
@@ -80,6 +82,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Robin](http://www.playiconoclasts.com/)
 - [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
 - [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
+- [WC2 Footman](https://old.reddit.com/r/PixelArt/comments/7d0y1p/oc_fireplace_animation/)
 
 ### Myself
 
