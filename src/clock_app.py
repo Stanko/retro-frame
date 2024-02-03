@@ -20,7 +20,7 @@ class ClockApp(BaseApp):
     def create_clock_sprite(self):
         self.display.clear()
 
-        digits_sprite = OnDiskBitmap(open('/clock/sprite.bmp', 'rb'))
+        digits_sprite = OnDiskBitmap(open('/assets/clock-sprite.bmp', 'rb'))
 
         separator_tilemap = TileGrid(
             digits_sprite,
