@@ -74,7 +74,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Dota emojis (diretide, giff, es)](https://dota2.fandom.com/wiki/Emoticons)
 - Earth and Moon - generated using wonderful [PixelPlanets](https://github.com/Deep-Fold/PixelPlanets)
 - [Ember Spirit](https://33.media.tumblr.com/3f53a2565f16799b155d33072ef5fca0/tumblr_nalmwaJGah1sgajexo2_250.gif)
-- [Firepit](https://old.reddit.com/r/warcraft3/comments/f3b6fw/warcraft_2_footman_remaster/)
+- [Firepit](https://old.reddit.com/r/PixelArt/comments/7d0y1p/oc_fireplace_animation/)
 - [Fox](https://elthen.itch.io/2d-pixel-art-fox-sprites)
 - [Hollow Knight](https://www.deviantart.com/haykira/art/Hallownest-Fellas-841502305)
 - [Jim](https://hani-amir.com/blog/2017/2/7/pixel-art-animation-basics-5-classic-side-scrolling-walking-running-animations-from-the-snes-era)
@@ -89,7 +89,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Robin](http://www.playiconoclasts.com/)
 - [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
 - [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
-- [WC2 Footman](https://old.reddit.com/r/PixelArt/comments/7d0y1p/oc_fireplace_animation/)
+- [WC2 Footman](https://old.reddit.com/r/warcraft3/comments/f3b6fw/warcraft_2_footman_remaster/)
 
 ### Myself
 
