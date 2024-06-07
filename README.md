@@ -69,7 +69,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 ### Other people:
 
 - [Bear](https://rephildesign.tumblr.com/post/120859307063/filbertgames-this-is-what-happens-when-you)
-- [Bunny][https://x.com/ko_dll/status/1792974719563485218]
+- [Bunny](https://x.com/ko_dll/status/1792974719563485218)
 - [Dog](https://dribbble.com/shots/2367354-Doggy-Rabbit)
 - [Dota emojis (diretide, giff, es)](https://dota2.fandom.com/wiki/Emoticons)
 - Earth and Moon - generated using wonderful [PixelPlanets](https://github.com/Deep-Fold/PixelPlanets)
