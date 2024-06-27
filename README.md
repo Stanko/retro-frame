@@ -95,6 +95,6 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 
 - Splash screen
 - Clock digits
-- [Pulsar](https://muffinman/pulsar) animations
+- [Pulsar](https://muffinman.io/pulsar) animations
 - Totoro - heavily inspired by [this one](https://www.deviantart.com/andrewjohnnnn/art/Totoro-Rain-GIF-613239881)
 - Tutur, in loving a memory of Artur <3
