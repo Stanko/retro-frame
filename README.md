@@ -2,9 +2,10 @@
 
 DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-frame/).
 
-![Retro Frame](./docs/retro-frame.jpg)
-
-Check a few more images and videos [here](https://imgur.com/a/cLXGWWd).
+|Photos & Videos||
+|-|-|
+|![Retro Frame photo showing Mario chasing a gumba](./docs/mario.jpg)|![Retro Frame photo showing Hollow Knight](./docs/hk.jpg)|
+|<video src="https://github.com/Stanko/retro-frame/assets/776788/32b4b00a-9a80-41c9-9a88-cf3a86338d27"></video>|<video src="https://github.com/Stanko/retro-frame/assets/776788/2ef91225-8ba0-4dff-8bf8-045a9eec68e6"></video>|
 
 There is a similar project you might want to check out:
 
@@ -12,11 +13,11 @@ There is a similar project you might want to check out:
 
 ## Intro
 
-The brain is [Adafruit MatrixPortal M4](https://www.adafruit.com/product/4745), ESP32 based controller. You'll need to follow Adafruit's documentation to install Circuit Python. Then you can copy the code (don't forget to create `src/settings.py`).
+The brain is [Adafruit MatrixPortal M4](https://www.adafruit.com/product/4745), an ESP32-based controller. You'll need to follow Adafruit's documentation to install CircuitPython. Then you can copy the code (don't forget to create src/settings.py).
 
 Files you'll need to copy to your MatrixPortal are:
 
-Rename `src/settings_example.py` to `src/settings.py`. If you want frame to connect to internet in order to fetch the correct time add your network name, password, and `skip_connection=False`.
+Rename `src/settings_example.py` to `src/settings.py`. If you want the frame to connect to the internet in order to fetch the correct time, add your network name, password, and set `skip_connection=False`.
 
 Then copy the following files and folders:
 
@@ -34,37 +35,40 @@ There are four apps:
 - Analogue clock (needs internet connection to get time)
 - Blank - used to preserve power during the night
 
-By default, display will switch to the digital clock at 23:30, to blank at midnight and to gif player at 8:30 in the morning. Check [src/settings_example.py](./src/settings_example.py) and copy it `src/settings.py`. Then update it to your preferences.
+By default, the display will switch to the digital clock at 23:30, to blank at midnight, and to gif player at 8:30 in the morning. Check [src/settings_example.py](./src/settings_example.py), copy it to src/settings.py, and update it to your preferences.
 
 
 ### Controls
 
-Tilting the display **left** and **right** will cycle between the apps (button **up** will do the same).
+Tilting the display **left** and **right** will cycle between the apps (button up will do the same).
 
-Tilting the display **back** and **forward** will (button **down** will do the same):
+Tilting the display **back** and **forward** will (button down will do the same):
+
 - Gif app - switch between gifs
 - Digital clock - switch between 12 and 24 hours clock modes
 
-
-![Retro Frame in clock mode](./docs/retro-frame-clock.jpg)
+|Digital Clock|Analogue Clock|
+|-|-|
+|![Retro Frame with digital clock app showing](./docs/retro-frame-clock-1.jpg)|![Retro Frame with analogue clock app showing](./docs/retro-frame-clock-2.jpg)|
 
 ## List of parts
 
-This is a list of all of the main parts with the links to the ones I used.
+This is a list of all of the main parts with the links to the ones we used.
 
 - Adafruit MatrixPortal M4 https://www.adafruit.com/product/4745
 - 64x64 RGB LED Matrix - 2.5mm Pitch - 1/32 Scan - https://www.adafruit.com/product/3649 or https://www.aliexpress.com/item/32816409052.html
 - LED diffuser - https://www.adafruit.com/product/4594
 - USB C charger - I had one lying around
-- The display fits into the IKEA SANNAHED picture frame. But check [frame-1.png](./random-backup-files/frame/frame-1.png) for a custom frame blueprints.
+- The display fits into the IKEA SANNAHED picture frame. But check [frame-new.png](./random-backup-files/frame/frame-new.png) for a custom frame blueprints.
 - USB C cable - https://www.aliexpress.com/item/1005002105030431.html
 - You can control the display by tilting it, but if you want to add buttons, I used these in the first version - https://www.aliexpress.com/item/4000043687021.html
+- [3D printed hooks](./random-backup-files/frame/hook.png) for the rubber band that presses the display against the diffuser.
 
 ![Retro Frame internals](./docs/retro-frame-internals.jpg)
 
 ## Art credits
 
-If I included your art and you want it removed, I'm sorry, just open an issue and I'll take care of it. The only reason I included your work in the first place, is because it is awesome and it makes me happy.
+If I included your art and you want it removed, I'm sorry, just open an issue and I'll take care of it. The only reason I included your work in the first place is because it is awesome and it makes me happy.
 
 ### Other people:
 
