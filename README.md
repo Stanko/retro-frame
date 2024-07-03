@@ -2,11 +2,10 @@
 
 DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-frame/).
 
-|Videos|Stills|
+|Photos & Videos||
 |-|-|
-|![Retro Frame](./docs/mario.jpg)|<video src="./docs/mario.mp4"></video>|
-|<video src="./docs/hk.mp4"></video>|![Retro Frame](./docs/hk.jpg)|
-
+|![Retro Frame photo showing Mario chasing a gumba](./docs/mario.jpg)|![Retro Frame photo showing Hollow Knight](./docs/hk.jpg)|
+|<video src="https://github.com/Stanko/retro-frame/assets/776788/32b4b00a-9a80-41c9-9a88-cf3a86338d27"></video>|<video src="https://github.com/Stanko/retro-frame/assets/776788/2ef91225-8ba0-4dff-8bf8-045a9eec68e6"></video>|
 
 There is a similar project you might want to check out:
 
