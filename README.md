@@ -59,10 +59,10 @@ This is a list of all of the main parts with the links to the ones we used.
 - 64x64 RGB LED Matrix - 2.5mm Pitch - 1/32 Scan - https://www.adafruit.com/product/3649 or https://www.aliexpress.com/item/32816409052.html
 - LED diffuser - https://www.adafruit.com/product/4594
 - USB C charger - I had one lying around
-- The display fits into the IKEA SANNAHED picture frame. But check [frame-new.png](./random-backup-files/frame/frame-new.png) for a custom frame blueprints.
+- The display fits into the IKEA SANNAHED picture frame. But check [frame-v2.png](./random-backup-files/frame/frame-v2.png) for a custom frame blueprints.
 - USB C cable - https://www.aliexpress.com/item/1005002105030431.html
 - You can control the display by tilting it, but if you want to add buttons, I used these in the first version - https://www.aliexpress.com/item/4000043687021.html
-- [3D printed hooks](./random-backup-files/frame/hook.png) for the rubber band that presses the display against the diffuser.
+- [3D printed hooks](./random-backup-files/frame/hook.png) for the rubber band that presses the display against the diffuser. Code for generating the model is [here](./random-backup-files/frame/hook.js).
 
 ![Retro Frame internals](./docs/retro-frame-internals.jpg)
 
