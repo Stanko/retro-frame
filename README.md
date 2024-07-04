@@ -62,7 +62,7 @@ This is a list of all of the main parts with the links to the ones we used.
 
 ![Retro Frame internals](./docs/retro-frame-internals.jpg)
 
-## Similat projects
+## Similar projects
 
 There is a few similar projects you might want to check out:
 
