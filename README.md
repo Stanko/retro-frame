@@ -2,14 +2,10 @@
 
 DIY pixel art frame, inspired by [Game Frame](https://ledseq.com/product/game-frame/).
 
-|Photos & Videos||
-|-|-|
-|![Retro Frame photo showing Mario chasing a gumba](./docs/mario.jpg)|![Retro Frame photo showing Hollow Knight](./docs/hk.jpg)|
-|<video src="https://github.com/Stanko/retro-frame/assets/776788/32b4b00a-9a80-41c9-9a88-cf3a86338d27"></video>|<video src="https://github.com/Stanko/retro-frame/assets/776788/2ef91225-8ba0-4dff-8bf8-045a9eec68e6"></video>|
-
-There is a similar project you might want to check out:
-
-- https://github.com/hanneslinder/esp-pixel-matrix
+![Retro Frame photo showing Mario chasing a gumba](./docs/mario.jpg)
+![Retro Frame photo showing Hollow Knight](./docs/hk.jpg)
+<video src="https://github.com/Stanko/retro-frame/assets/776788/32b4b00a-9a80-41c9-9a88-cf3a86338d27"></video>
+<video src="https://github.com/Stanko/retro-frame/assets/776788/2ef91225-8ba0-4dff-8bf8-045a9eec68e6"></video>
 
 ## Intro
 
@@ -65,6 +61,14 @@ This is a list of all of the main parts with the links to the ones we used.
 - [3D printed hooks](./random-backup-files/frame/hook.png) for the rubber band that presses the display against the diffuser. Code for generating the model is [here](./random-backup-files/frame/hook.js).
 
 ![Retro Frame internals](./docs/retro-frame-internals.jpg)
+
+## Similat projects
+
+There is a few similar projects you might want to check out:
+
+- https://github.com/hanneslinder/esp-pixel-matrix
+- https://www.youtube.com/watch?v=A5A6ET64Oz8
+
 
 ## Art credits
 
