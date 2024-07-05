@@ -97,6 +97,7 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Robin](http://www.playiconoclasts.com/)
 - [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
 - [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
+- [Tears of the Kingdom](https://www.pixeljess.com/portfolio)
 - [WC2 Footman](https://old.reddit.com/r/warcraft3/comments/f3b6fw/warcraft_2_footman_remaster/)
 
 ### Myself
