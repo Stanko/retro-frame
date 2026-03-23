@@ -1,12 +1,12 @@
 import gc
 import time
 
-from src.display_module import DisplayModule
-from src.network_module import NetworkModule
-from src.real_time_module import RealTimeClockModule
+from src.apps.splash_app import SplashApp
+from src.modules.display_module import DisplayModule
+from src.modules.network_module import NetworkModule
+from src.modules.real_time_module import RealTimeClockModule
+from src.modules.user_input_module import UserInputModule
 from src.settings import settings
-from src.splash_app import SplashApp
-from src.user_input_module import UserInputModule
 
 
 class RetroFrame:

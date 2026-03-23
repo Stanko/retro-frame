@@ -2,9 +2,9 @@ import board
 import busio
 from board import BUTTON_DOWN, BUTTON_UP
 
-from src.accelerometer_module import AccelerometerModule, Axis
-from src.button_module import ButtonModule
-from src.rotary_encoder_module import RotaryEncoderModule
+from src.modules.accelerometer_module import AccelerometerModule, Axis
+from src.modules.button_module import ButtonModule
+from src.modules.rotary_encoder_module import RotaryEncoderModule
 
 
 class UserInputEvents:

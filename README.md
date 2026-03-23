@@ -17,7 +17,7 @@ Rename `src/settings_example.py` to `src/settings.py`. If you want the frame to 
 
 Then copy the following files and folders:
 
-- `code.py` and `src/*.py` (see `copy.bat|sh`)
+- `code.py` and all Python files under `src/` (see `copy.bat|sh`)
 - `firmware/[current_version]/lib` to `lib`
 - `assets` (which includes splash screen and digital clock sprite)
 - `gif` (pick and choose animations you like)

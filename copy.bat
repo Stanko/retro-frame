@@ -26,22 +26,16 @@ for /f "delims=" %%L in ('git status --porcelain 2^>nul') do (
     set "PATHNAME=!LINE:~3!"
     set "ALLOWED="
 
-    rem For renames, copy the new path on the right-hand side of "old -> new".
     if not "!PATHNAME:* -> =!"=="!PATHNAME!" set "PATHNAME=!PATHNAME:* -> =!"
-
-    rem Convert git-style separators to Windows paths for cmd copy/mkdir.
     set "PATHNAME=!PATHNAME:/=\!"
 
-    rem Only allow code.py and files under src\, assets\, or gif\.
     if /I "!PATHNAME!"=="code.py" set "ALLOWED=1"
     if /I "!PATHNAME:~0,4!"=="src\" set "ALLOWED=1"
     if /I "!PATHNAME:~0,7!"=="assets\" set "ALLOWED=1"
     if /I "!PATHNAME:~0,4!"=="gif\" set "ALLOWED=1"
 
-    rem settings.py is copied explicitly above, so skip it here.
     if /I "!PATHNAME!"=="src\settings.py" set "ALLOWED="
 
-    rem Skip deleted entries.
     if defined ALLOWED (
         echo(!STATUS!| findstr /C:"D" >nul
         if errorlevel 1 (
@@ -68,16 +62,16 @@ if not exist "%SOURCE%" exit /b 0
 
 set /a ATTEMPTED+=1
 
-for %%F in ("%SOURCE%") do (
-    set "SOURCE_ABS=%%~fF"
-    set "SOURCE_REL=%%~fF"
-)
+for %%F in ("%SOURCE%") do set "SOURCE_ABS=%%~fF"
+set "SOURCE_REL=!SOURCE_ABS:%CD%\=!"
+if /I "!SOURCE_REL!"=="!SOURCE_ABS!" set "SOURCE_REL=%SOURCE%"
+set "SOURCE_REL=!SOURCE_REL:/=\!"
 
-set "SOURCE_REL=!SOURCE_REL:%CD%\=!"
+set "DEST_PATH=%DEST%!SOURCE_REL!"
+for %%F in ("!DEST_PATH!") do set "DEST_DIR=%%~dpF"
+if not exist "!DEST_DIR!" mkdir "!DEST_DIR!" >nul 2>&1
 
-for %%F in ("!SOURCE_REL!") do if not exist "%DEST%%%~dpF" mkdir "%DEST%%%~dpF" >nul 2>&1
-
-copy /Y "!SOURCE_REL!" "%DEST%!SOURCE_REL!" >nul
+copy /Y "!SOURCE_ABS!" "!DEST_PATH!" >nul
 if errorlevel 1 (
     echo Failed to copy !SOURCE_REL!
 ) else (
