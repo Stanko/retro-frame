@@ -2,7 +2,7 @@ from src.analogue_clock_app import AnalogueClockApp
 from src.blank_app import BlankApp
 from src.clock_app import ClockApp
 from src.gif_player_app import GifPlayerApp
-from src.settings_utils import AppSettings, Settings, WifiSettings
+from src.settings_utils import AppSettings, RealTimeSettings, Settings, WifiSettings
 
 settings = Settings(
     apps=[
@@ -36,4 +36,5 @@ settings = Settings(
         ),
     ],
     wifi=WifiSettings('SSID_NAME', 'SSDI_PASSWORD', skip_connection=True),
+    real_time=RealTimeSettings(timezone='Europe/Amsterdam'),
 )

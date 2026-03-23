@@ -11,10 +11,16 @@ class WifiSettings:
         self.skip_connection = skip_connection
 
 
+class RealTimeSettings:
+    def __init__(self, timezone: str):
+        self.timezone = timezone
+
+
 class Settings:
-    def __init__(self, apps, wifi: WifiSettings):
+    def __init__(self, apps, wifi: WifiSettings, real_time: RealTimeSettings):
         self.apps = apps
         self.wifi = wifi
+        self.real_time = real_time
 
 
 class AppSettings:
