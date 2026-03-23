@@ -15,12 +15,34 @@ class DisplaySettings:
         self.color_order = color_order
 
 
+class AccelerometerSettings:
+    def __init__(self, address=0x19):
+        self.address = address
+
+
+class RotaryEncoderSettings:
+    def __init__(self, enabled=False, address=0x36, button_pin=24):
+        self.enabled = enabled
+        self.address = address
+        self.button_pin = button_pin
+
+
 class Settings:
-    def __init__(self, apps, wifi: WifiSettings, real_time: RealTimeSettings, display=None):
+    def __init__(
+        self,
+        apps,
+        wifi: WifiSettings,
+        real_time: RealTimeSettings,
+        display=None,
+        accelerometer=None,
+        rotary_encoder=None,
+    ):
         self.apps = apps
         self.wifi = wifi
         self.real_time = real_time
         self.display = display or DisplaySettings()
+        self.accelerometer = accelerometer or AccelerometerSettings()
+        self.rotary_encoder = rotary_encoder or RotaryEncoderSettings()
 
 
 class AppSettings:
