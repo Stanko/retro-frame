@@ -9,7 +9,7 @@ from src.accelerometer_module import AccelerometerModule, Axis
 # Apps
 from src.button_module import ButtonModule
 from src.display_module import DisplayModule
-from src.network_module import NetworkModule
+from src.network_module import BaseNetworkModule, create_network_module
 from src.real_time_module import RealTimeClockModule
 from src.settings import settings
 from src.splash_app import SplashApp
@@ -23,8 +23,8 @@ class RetroFrame:
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
         self.accelerometer: AccelerometerModule = AccelerometerModule()
-        self.network: NetworkModule = NetworkModule(settings.wifi)
-        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network)
+        self.network: BaseNetworkModule = create_network_module(settings.wifi)
+        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, settings.real_time)
         self.modules = {"real_time": self.real_time}
 
         self.current_app = None
