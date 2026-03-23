@@ -1,28 +1,20 @@
 import gc
 import time
 
-from board import BUTTON_DOWN, BUTTON_UP
-
-# Modules
-from src.accelerometer_module import AccelerometerModule, Axis
-
-# Apps
-from src.button_module import ButtonModule
 from src.display_module import DisplayModule
 from src.network_module import BaseNetworkModule, create_network_module
 from src.real_time_module import RealTimeClockModule
 from src.settings import settings
 from src.splash_app import SplashApp
+from src.user_input_module import UserInputModule
 
 
 class RetroFrame:
     """Container class for all modules and apps."""
 
     def __init__(self):
-        self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
-        self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4, settings=settings.display)
-        self.accelerometer: AccelerometerModule = AccelerometerModule()
+        self.user_input = UserInputModule(settings.accelerometer, settings.rotary_encoder)
         self.network: BaseNetworkModule = create_network_module(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, settings.real_time)
         self.modules = {"real_time": self.real_time}
@@ -80,25 +72,20 @@ class RetroFrame:
             gc.collect()
             self.real_time.check_for_time_sync()
             self.check_for_scheduled_app_switch()
+            input_events = self.user_input.poll()
 
-            # Handle button up - change app
-            if self.button_up.is_pressed():
+            for _ in range(input_events.next_app_steps):
                 self.next_app()
 
-            # Handle button down - propagate the event to the current app
-            if self.button_down.is_pressed():
-                self.current_app.handle_button_down()
-
-            # Handle accelerometer X axis - change app
-            if self.accelerometer.check_next_by_axis(Axis.X):
-                self.next_app()
-            if self.accelerometer.check_previous_by_axis(Axis.X):
+            for _ in range(input_events.previous_app_steps):
                 self.previous_app()
 
-            # Handle accelerometer Z axis - propagate the event to the current app
-            if self.accelerometer.check_next_by_axis(Axis.Z):
+            if input_events.button_down:
+                self.current_app.handle_button_down()
+
+            if input_events.app_action_next:
                 self.current_app.handle_accelerometer_z_next()
-            if self.accelerometer.check_previous_by_axis(Axis.Z):
+            if input_events.app_action_previous:
                 self.current_app.handle_accelerometer_z_previous()
 
             sleep_duration = self.current_app.draw_frame()

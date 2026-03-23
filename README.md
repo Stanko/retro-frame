@@ -22,6 +22,23 @@ Then copy the following files and folders:
 - `assets` (which includes splash screen and digital clock sprite)
 - `gif` (pick and choose animations you like)
 
+## Hardware Addresses
+
+If your hardware uses different I2C addresses, update them in `src/settings.py` (see `src/settings_example.py` for the expected structure).
+
+Common defaults in this project:
+
+- LIS3DH accelerometer: `0x19`
+- Seesaw rotary encoder: `0x36`
+- RTC chip: `0x68`
+
+Relevant settings are:
+
+- `accelerometer=AccelerometerSettings(address=0x19)`
+- `rotary_encoder=RotaryEncoderSettings(enabled=True, address=0x36, button_pin=24)`
+
+If you are not sure what address your Seesaw encoder is using, run the I2C Seesaw diagnostic and read the detected address from serial output.
+
 ## Apps
 
 There are four apps:

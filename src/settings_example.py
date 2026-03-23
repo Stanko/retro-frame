@@ -2,7 +2,15 @@ from src.analogue_clock_app import AnalogueClockApp
 from src.blank_app import BlankApp
 from src.clock_app import ClockApp
 from src.gif_player_app import GifPlayerApp
-from src.settings_utils import AppSettings, DisplaySettings, RealTimeSettings, Settings, WifiSettings
+from src.settings_utils import (
+    AccelerometerSettings,
+    AppSettings,
+    DisplaySettings,
+    RealTimeSettings,
+    RotaryEncoderSettings,
+    Settings,
+    WifiSettings,
+)
 
 settings = Settings(
     apps=[
@@ -38,4 +46,7 @@ settings = Settings(
     wifi=WifiSettings('SSID_NAME', 'SSDI_PASSWORD', skip_connection=True),
     real_time=RealTimeSettings(timezone='Europe/Amsterdam'),
     display=DisplaySettings(color_order='RBG'),
+    # Use the I2C Seesaw diagnostic to discover device addresses when needed.
+    accelerometer=AccelerometerSettings(address=0x19),
+    rotary_encoder=RotaryEncoderSettings(enabled=False, address=0x36, button_pin=24),
 )

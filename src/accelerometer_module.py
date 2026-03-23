@@ -15,10 +15,10 @@ class Axis:
 
 class AccelerometerModule:
 
-    def __init__(self):
-        self.i2c = busio.I2C(board.SCL, board.SDA)
+    def __init__(self, i2c=None, address=0x19):
+        self.i2c = i2c or busio.I2C(board.SCL, board.SDA)
         self.int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        self.lis3dh = adafruit_lis3dh.LIS3DH_I2C(self.i2c, address=0x19, int1=self.int1)
+        self.lis3dh = adafruit_lis3dh.LIS3DH_I2C(self.i2c, address=address, int1=self.int1)
         # Set range of accelerometer (can be RANGE_2_G, RANGE_4_G, RANGE_8_G or RANGE_16_G).
         self.lis3dh.range = adafruit_lis3dh.RANGE_2_G
 
