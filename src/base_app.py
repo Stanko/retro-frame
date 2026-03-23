@@ -1,4 +1,4 @@
-from src.display_module import DisplayModule
+from src.modules.display_module import DisplayModule
 
 
 class BaseApp:

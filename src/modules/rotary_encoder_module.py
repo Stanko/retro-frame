@@ -7,7 +7,7 @@ except ImportError:
     seesaw_digitalio = None
     seesaw_rotaryio = None
 
-from src.button_module import ButtonModule
+from src.modules.button_module import ButtonModule
 
 
 class RotaryEncoderModule:

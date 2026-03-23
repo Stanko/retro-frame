@@ -1,7 +1,7 @@
-from src.analogue_clock_app import AnalogueClockApp
-from src.blank_app import BlankApp
-from src.clock_app import ClockApp
-from src.gif_player_app import GifPlayerApp
+from src.apps.analogue_clock_app import AnalogueClockApp
+from src.apps.blank_app import BlankApp
+from src.apps.clock_app import ClockApp
+from src.apps.gif_player_app import GifPlayerApp
 from src.settings_utils import (
     AccelerometerSettings,
     AppSettings,
