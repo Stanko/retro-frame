@@ -14,10 +14,7 @@ class DisplayModule:
             color_order=settings.color_order,
         )
         self.sprite_group = Group()
-        if hasattr(self.matrix.display, "root_group"):
-            self.matrix.display.root_group = self.sprite_group
-        else:
-            self.matrix.display.show(self.sprite_group)
+        self.matrix.display.root_group = self.sprite_group
 
     def clear(self) -> None:
         while self.sprite_group:
