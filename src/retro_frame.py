@@ -21,7 +21,7 @@ class RetroFrame:
     def __init__(self):
         self.button_up: ButtonModule = ButtonModule(button_ref=BUTTON_UP)
         self.button_down: ButtonModule = ButtonModule(button_ref=BUTTON_DOWN)
-        self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4)
+        self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4, settings=settings.display)
         self.accelerometer: AccelerometerModule = AccelerometerModule()
         self.network: BaseNetworkModule = create_network_module(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, settings.real_time)
