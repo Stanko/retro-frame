@@ -1,9 +1,3 @@
-from src.analogue_clock_app import AnalogueClockApp
-from src.blank_app import BlankApp
-from src.clock_app import ClockApp
-from src.gif_player_app import GifPlayerApp
-
-
 class WifiSettings:
     def __init__(self, ssid, password, skip_connection):
         self.ssid = ssid
@@ -16,11 +10,17 @@ class RealTimeSettings:
         self.timezone = timezone
 
 
+class DisplaySettings:
+    def __init__(self, color_order="RGB"):
+        self.color_order = color_order
+
+
 class Settings:
-    def __init__(self, apps, wifi: WifiSettings, real_time: RealTimeSettings):
+    def __init__(self, apps, wifi: WifiSettings, real_time: RealTimeSettings, display=None):
         self.apps = apps
         self.wifi = wifi
         self.real_time = real_time
+        self.display = display or DisplaySettings()
 
 
 class AppSettings:
