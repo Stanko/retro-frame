@@ -2,7 +2,7 @@ import gc
 import time
 
 from src.display_module import DisplayModule
-from src.network_module import BaseNetworkModule, create_network_module
+from src.network_module import NetworkModule
 from src.real_time_module import RealTimeClockModule
 from src.settings import settings
 from src.splash_app import SplashApp
@@ -15,7 +15,7 @@ class RetroFrame:
     def __init__(self):
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4, settings=settings.display)
         self.user_input = UserInputModule(settings.accelerometer, settings.rotary_encoder)
-        self.network: BaseNetworkModule = create_network_module(settings.wifi)
+        self.network: NetworkModule = NetworkModule(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, settings.real_time)
         self.modules = {"real_time": self.real_time}
 
