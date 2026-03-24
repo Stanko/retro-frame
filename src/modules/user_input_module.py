@@ -28,7 +28,7 @@ class UserInputModule:
         self.rotary_encoder = self._create_rotary_encoder(rotary_encoder_settings)
 
     def _create_rotary_encoder(self, rotary_encoder_settings):
-        if not rotary_encoder_settings.enabled:
+        if not rotary_encoder_settings:
             return None
 
         try:

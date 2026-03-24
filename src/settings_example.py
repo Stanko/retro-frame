@@ -48,5 +48,9 @@ settings = Settings(
     display=DisplaySettings(color_order='RBG'),
     # Use the I2C Seesaw diagnostic to discover device addresses when needed.
     accelerometer=AccelerometerSettings(address=0x19),
-    rotary_encoder=RotaryEncoderSettings(enabled=False, address=0x36, button_pin=24),
+
+    # rotary_encoder (Optional): If not provided, only accelerometer will be used
+    # If you want to use a rotary encoder, make sure to provide the correct I2C address and button pin.
+    # rotary_encoder=RotaryEncoderSettings(enabled=True, address=0x36, button_pin=24),
+    rotary_encoder=None
 )
