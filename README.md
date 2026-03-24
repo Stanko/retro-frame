@@ -95,10 +95,13 @@ If I included your art and you want it removed, I'm sorry, just open an issue an
 - [Ori](https://twitter.com/WoostarsPixels/status/1543954734108872705?cxt=HHwWgsC8vdCpne0qAAAA)
 - [Rafael](https://adamklingpixel.weebly.com/)
 - [Robin](http://www.playiconoclasts.com/)
+- [Ronin](https://old.reddit.com/user/reinbo_game)
 - [Spinning skull](https://www.artstation.com/artwork/ykRDB3)
 - [The One Ring](https://dribbble.com/shots/3273233-The-One-Ring)
 - [Tears of the Kingdom](https://www.pixeljess.com/portfolio)
 - [WC2 Footman](https://old.reddit.com/r/warcraft3/comments/f3b6fw/warcraft_2_footman_remaster/)
+- [Penguin](https://old.reddit.com/r/PixelArt/comments/1pt8vqg/some_people_were_convinced_my_last_post_used_3d_i/)
+
 
 ### Myself
 
