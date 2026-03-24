@@ -21,8 +21,7 @@ class AccelerometerSettings:
 
 
 class RotaryEncoderSettings:
-    def __init__(self, enabled=False, address=0x36, button_pin=24):
-        self.enabled = enabled
+    def __init__(self, address=0x36, button_pin=24):
         self.address = address
         self.button_pin = button_pin
 
@@ -42,7 +41,7 @@ class Settings:
         self.real_time = real_time
         self.display = display or DisplaySettings()
         self.accelerometer = accelerometer or AccelerometerSettings()
-        self.rotary_encoder = rotary_encoder or RotaryEncoderSettings()
+        self.rotary_encoder = rotary_encoder
 
 
 class AppSettings:
