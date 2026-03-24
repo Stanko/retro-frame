@@ -22,6 +22,10 @@ Then copy the following files and folders:
 - `assets` (which includes splash screen and digital clock sprite)
 - `gif` (pick and choose animations you like)
 
+If you are using a Matrix Portal M4 chip, the latest retro-frame version is saved in branch: `v1`
+
+For Matrix Portal S3 chips, use the latest commit from branch `dev`
+
 ## Hardware Addresses
 
 If your hardware uses different I2C addresses, update them in `src/settings.py` (see `src/settings_example.py` for the expected structure).
