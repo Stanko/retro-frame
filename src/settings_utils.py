@@ -6,8 +6,19 @@ class WifiSettings:
 
 
 class RealTimeSettings:
-    def __init__(self, timezone: str):
+    def __init__(
+        self,
+        timezone: str,
+        chip_name=None,
+    ):
         self.timezone = timezone
+        self.chip_name = self.normalize_chip_name(chip_name)
+
+    @staticmethod
+    def normalize_chip_name(chip_name):
+        if chip_name is None:
+            return None
+        return chip_name.replace("-", "").replace("_", "").replace(" ", "").lower()
 
 
 class DisplaySettings:

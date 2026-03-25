@@ -44,7 +44,10 @@ settings = Settings(
         ),
     ],
     wifi=WifiSettings('SSID_NAME', 'SSDI_PASSWORD', skip_connection=True),
-    real_time=RealTimeSettings(timezone='Europe/Amsterdam'),
+    real_time=RealTimeSettings(
+        timezone='Europe/Amsterdam',
+        chip_name='PCF8523', # Optional, if not set, it keeps the time in memory and fetch online time on every boot
+    ),
     display=DisplaySettings(color_order='RBG'),
     # Use the I2C Seesaw diagnostic to discover device addresses when needed.
     accelerometer=AccelerometerSettings(address=0x19),

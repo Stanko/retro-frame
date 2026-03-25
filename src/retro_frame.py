@@ -1,5 +1,7 @@
 import gc
 import time
+import busio
+import board
 
 from src.apps.splash_app import SplashApp
 from src.modules.display_module import DisplayModule
@@ -14,9 +16,10 @@ class RetroFrame:
 
     def __init__(self):
         self.display: DisplayModule = DisplayModule(width=64, height=64, bit_depth=4, settings=settings.display)
-        self.user_input = UserInputModule(settings.accelerometer, settings.rotary_encoder)
+        self.i2c = busio.I2C(board.SCL, board.SDA)
+        self.user_input = UserInputModule(self.i2c, settings.accelerometer, settings.rotary_encoder)
         self.network: NetworkModule = NetworkModule(settings.wifi)
-        self.real_time: RealTimeClockModule = RealTimeClockModule(self.network, settings.real_time)
+        self.real_time: RealTimeClockModule = RealTimeClockModule(self.i2c, self.network, settings.real_time)
         self.modules = {"real_time": self.real_time}
 
         self.current_app = None
