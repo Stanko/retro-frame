@@ -2,6 +2,7 @@ from src.apps.analogue_clock_app import AnalogueClockApp
 from src.apps.blank_app import BlankApp
 from src.apps.clock_app import ClockApp
 from src.apps.gif_player_app import GifPlayerApp
+from src.apps.train_radar import TrainRadarApp
 from src.settings_utils import (
     AccelerometerSettings,
     AppSettings,
@@ -16,6 +17,13 @@ settings = Settings(
     apps=[
         AppSettings(
             app=AnalogueClockApp,
+        ),
+        AppSettings(
+            app=TrainRadarApp,
+            settings={
+                'url': 'https://train-radar-nl.fly.dev/train/radar',
+                'poll_interval_seconds': 10.0,
+            },
         ),
         AppSettings(
             app=GifPlayerApp,

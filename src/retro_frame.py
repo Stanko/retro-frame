@@ -20,7 +20,7 @@ class RetroFrame:
         self.user_input = UserInputModule(self.i2c, settings.accelerometer, settings.rotary_encoder)
         self.network: NetworkModule = NetworkModule(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.i2c, self.network, settings.real_time)
-        self.modules = {"real_time": self.real_time}
+        self.modules = {"real_time": self.real_time, "network": self.network}
 
         self.current_app = None
         self.current_app_index = 0
