@@ -26,6 +26,45 @@ If you are using a Matrix Portal M4 chip, the latest retro-frame version is save
 
 For Matrix Portal S3 chips, use the latest commit from branch `dev`
 
+## Real Time Clock (RTC) Support
+
+The current RTC implementation supports the Adafruit PCF8523 on the shared I2C bus.
+
+Configuration:
+
+- Enable RTC support by setting `real_time=RealTimeSettings(timezone="Europe/Amsterdam", chip_name="PCF8523")`
+- If `chip_name` is omitted, the project falls back to the built-in software RTC only
+
+Required CircuitPython libraries for PCF8523 support:
+
+- `adafruit_pcf8523` package
+- `adafruit_bus_device`
+- `adafruit_register`
+
+Behavior:
+
+- On boot, Retro Frame tries to read time from the external RTC
+- The external RTC is only trusted after the device has completed at least one successful online sync
+- That trust flag is stored internally in `microcontroller.nvm`, not in user settings and not in the filesystem
+- If the trust flag is missing, the stored RTC time is ignored until the first successful online sync
+- After a successful online sync, Retro Frame updates:
+  - the built-in CircuitPython runtime RTC (`RTC().datetime`)
+  - the external PCF8523 RTC
+  - the internal `microcontroller.nvm` sync flag
+
+Update cycle:
+
+- If the hardware clock has been updated once and the flag is set, no further automatic syncs are made. You can use Retro-Frame completely offline.
+- If retro frame is connected, pressing the main action button while either clock app is active also triggers an immediate online refresh and saves the latest time into the hardware clock.
+- On star-up, the hardware clock is printed on console for debugging.
+- If the hardware clock continue to lose time, check the battery.
+
+Fallback behavior:
+
+- If the PCF8523 hardware is not connected, not configured, or its libraries are missing, the system falls back to software RTC only
+- In software-only mode, time is still fetched from the network when Wi-Fi is available
+- If stored hardware RTC time looks wrong after it has been trusted, the current implementation will still use it; check the RTC backup battery in that case
+
 ## Hardware Addresses
 
 If your hardware uses different I2C addresses, update them in `src/settings.py` (see `src/settings_example.py` for the expected structure).
@@ -34,7 +73,6 @@ Common defaults in this project:
 
 - LIS3DH accelerometer: `0x19`
 - Seesaw rotary encoder: `0x36`
-- RTC chip: `0x68`
 
 Relevant settings are:
 
@@ -48,9 +86,11 @@ If you are not sure what address your Seesaw encoder is using, run the I2C Seesa
 There are four apps:
 
 - Gif player (runs each animation for 5 minutes then switches to the next one)
-- Digital clock (needs internet connection to get time)
-- Analogue clock (needs internet connection to get time)
+- Digital clock
+- Analogue clock
 - Blank - used to preserve power during the night
+
+Without an external RTC, the clock apps need internet access to get correct time after boot. With a configured PCF8523 that has already been synced once, the clocks can start from stored RTC time and then refresh online later.
 
 By default, the display will switch to the digital clock at 23:30, to blank at midnight, and to gif player at 8:30 in the morning. Check [src/settings_example.py](./src/settings_example.py), copy it to src/settings.py, and update it to your preferences.
 
@@ -63,10 +103,11 @@ Tilting the display **back** and **forward** will (button down will do the same)
 
 - Gif app - switch between gifs
 - Digital clock - switch between 12 and 24 hours clock modes
+- Digital clock / Analogue clock - force an immediate online time refresh
 
-|Digital Clock|Analogue Clock|
-|-|-|
-|![Retro Frame with digital clock app showing](./docs/retro-frame-clock-1.jpg)|![Retro Frame with analogue clock app showing](./docs/retro-frame-clock-2.jpg)|
+| Digital Clock                                                                 | Analogue Clock                                                                 |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| ![Retro Frame with digital clock app showing](./docs/retro-frame-clock-1.jpg) | ![Retro Frame with analogue clock app showing](./docs/retro-frame-clock-2.jpg) |
 
 ## List of parts
 

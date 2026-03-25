@@ -1,5 +1,3 @@
-import board
-import busio
 from board import BUTTON_DOWN, BUTTON_UP
 
 from src.modules.accelerometer_module import AccelerometerModule, Axis
@@ -17,10 +15,10 @@ class UserInputEvents:
 
 
 class UserInputModule:
-    def __init__(self, accelerometer_settings, rotary_encoder_settings):
+    def __init__(self, i2c, accelerometer_settings, rotary_encoder_settings):
         self.button_up = ButtonModule(button_ref=BUTTON_UP)
         self.button_down = ButtonModule(button_ref=BUTTON_DOWN)
-        self.i2c = busio.I2C(board.SCL, board.SDA)
+        self.i2c = i2c
         self.accelerometer = AccelerometerModule(
             i2c=self.i2c,
             address=accelerometer_settings.address,
