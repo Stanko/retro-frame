@@ -59,13 +59,18 @@ class UserInputModule:
             if self.rotary_encoder.is_pressed():
                 events.button_down = True
 
-        if self.accelerometer.check_next_by_axis(Axis.X):
-            events.next_app_steps += 1
-        if self.accelerometer.check_previous_by_axis(Axis.X):
-            events.previous_app_steps += 1
-        if self.accelerometer.check_next_by_axis(Axis.Z):
-            events.app_action_next = True
-        if self.accelerometer.check_previous_by_axis(Axis.Z):
-            events.app_action_previous = True
+        accelerometer_event = self.accelerometer.classify_axes()
+        if accelerometer_event is not None:
+            axis, direction = accelerometer_event
+            if axis == Axis.X:
+                if direction > 0:
+                    events.next_app_steps += 1
+                else:
+                    events.previous_app_steps += 1
+            if axis == Axis.Z:
+                if direction > 0:
+                    events.app_action_next = True
+                else:
+                    events.app_action_previous = True
 
         return events

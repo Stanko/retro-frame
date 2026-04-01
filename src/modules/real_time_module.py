@@ -161,12 +161,14 @@ class OnlineTimeSource:
 class RealTimeClockModule:
     seconds_in_minute = 60
     minutes_in_hour = 60
+    sync_check_interval_seconds = 60
 
     def __init__(self, i2c, network, settings: RealTimeSettings):
         self.i2c = i2c
         self.network = network
         self.settings = settings
         self.last_sync = None
+        self.last_sync_check_at = None
         self.update_frequency = self.seconds_in_minute * self.minutes_in_hour * 5  # 5 hours
         self.hardware_clock = HardwareRealTimeClock(self.i2c, self.settings)
         self.online_time_source = OnlineTimeSource(self.network, self.settings.timezone)
@@ -201,9 +203,17 @@ class RealTimeClockModule:
             self.last_sync = time.time() - (self.update_frequency * 0.75)
 
     def check_for_time_sync(self):
+        now = time.monotonic()
+        if (
+            self.last_sync_check_at is not None
+            and (now - self.last_sync_check_at) < self.sync_check_interval_seconds
+        ):
+            return
+        self.last_sync_check_at = now
+
         if self.network.wifi_settings.skip_connection:
             return
-        
+
         if self.hardware_clock.is_available and self.hardware_clock.has_been_synced():
             return
 

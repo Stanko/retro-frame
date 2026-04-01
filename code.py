@@ -3,4 +3,5 @@
 # import src.diagnostics.font_diagnostic
 # import src.diagnostics.i2c_seesaw_diagnostic
 # import src.diagnostics.ui_components_diagnostic
+# import src.diagnostics.flicker_diagnostic
 import src.retro_frame

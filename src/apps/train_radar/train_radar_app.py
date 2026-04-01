@@ -2,7 +2,6 @@ import math
 import time
 
 from adafruit_bitmap_font import bitmap_font
-from adafruit_display_shapes.line import Line
 from adafruit_display_text import label
 from displayio import Bitmap, Group, Palette, TileGrid
 
@@ -23,6 +22,7 @@ from src.ui.scrolling_line import ScrollingLine
 
 
 MOCK = None
+SEPARATOR_Y = 31
 
 
 TRAIN_RADAR_CONFIG = TrainRadarConfig(
@@ -31,7 +31,7 @@ TRAIN_RADAR_CONFIG = TrainRadarConfig(
         font_path="/assets/4by6.bdf",
         frame_interval_seconds=0.05,
         layout_refresh_seconds=1.0,
-        divider_color=0x202020,
+        divider_color=0xffffff,
     ),
     panel_layout=TrainRadarPanelLayoutConfig(
         font_height=6,
@@ -51,9 +51,9 @@ TRAIN_RADAR_CONFIG = TrainRadarConfig(
     style=TrainRadarStyleConfig(
         upcoming_line_colors=(
             0xFF3D00,
-            0x999999,
             0xFFFFFF,
-            0x999999,
+            0xFFFFFF,
+            0xFFFFFF,
         ),
         current_line_colors=(
             0xFFFFFF,
@@ -245,7 +245,7 @@ class TrainRadarApp(BaseApp):
 
         self.root_group = Group()
         self.display.draw(self.root_group)
-        self.root_group.append(Line(0, 31, 63, 31, color=self.config.display.divider_color))
+        self.root_group.append(self._build_separator())
 
         self.top_panel = RadarHalfPanel(
             self.font,
@@ -310,6 +310,12 @@ class TrainRadarApp(BaseApp):
         font.load_glyphs(font_glyphs)
         return font
 
+    def _build_separator(self):
+        bitmap = Bitmap(self.config.panel_layout.panel_width, 1, 1)
+        palette = Palette(1)
+        palette[0] = self.config.display.divider_color
+        return TileGrid(bitmap, pixel_shader=palette, x=0, y=SEPARATOR_Y)
+
     def _should_render_layout(self, now: float) -> bool:
         if self.last_layout_update_at is None:
             return True
@@ -317,8 +323,7 @@ class TrainRadarApp(BaseApp):
         if self.polling.data_fetched_at != self.last_rendered_data_fetched_at:
             return True
 
-        refresh_interval = min(self.config.display.layout_refresh_seconds, self.config.animation.chevron_interval_seconds)
-        return (now - self.last_layout_update_at) >= refresh_interval
+        return (now - self.last_layout_update_at) >= self.config.display.layout_refresh_seconds
 
     def _should_force_data_refresh(self, now: float) -> bool:
         if self.polling.data is None or self.polling.data_fetched_at is None:

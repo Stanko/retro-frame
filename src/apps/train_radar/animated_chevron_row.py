@@ -40,15 +40,15 @@ class AnimatedChevronRow:
             y=self.line_y,
         ).bounding_box[2]
         self.hidden_slot_count = self._hidden_slot_count_for_text(self.reserved_middle_text)
-        left_start_x, left_end_x, right_start_x, right_end_x = self._chevron_track()
+        self.left_chevron_animation = None
+        self.right_chevron_animation = None
+        self.left_animation_group = Group()
+        self.right_animation_group = Group()
 
-        self.left_chevron_animation = self._build_animation(left_start_x, left_end_x, self.chevron_color, 0.0)
-        self.right_chevron_animation = self._build_animation(right_start_x, right_end_x, self.chevron_color, 0.0)
-
-        self.left_chevron_animation.add_to_group(self.group)
+        self.group.append(self.left_animation_group)
         self.group.append(self.static_chevron_label)
         self.group.append(self.middle_label)
-        self.right_chevron_animation.add_to_group(self.group)
+        self.group.append(self.right_animation_group)
 
     def add_to_group(self, group: Group) -> None:
         group.append(self.group)
@@ -58,8 +58,10 @@ class AnimatedChevronRow:
         self.chevron_color = chevron_color
         self.middle_label.color = text_color
         self.static_chevron_label.color = chevron_color
-        self.left_chevron_animation.set_color(chevron_color)
-        self.right_chevron_animation.set_color(chevron_color)
+        if self.left_chevron_animation is not None:
+            self.left_chevron_animation.set_color(chevron_color)
+        if self.right_chevron_animation is not None:
+            self.right_chevron_animation.set_color(chevron_color)
 
     def render(self, text: str, show_chevron: bool, animate_chevrons: bool) -> None:
         previous_text, previous_show_chevron, previous_animate_chevrons = self.render_state
@@ -70,6 +72,7 @@ class AnimatedChevronRow:
         self._align_middle_text()
 
         if animate_chevrons and text:
+            self._ensure_chevron_animations()
             self.static_chevron_label.text = ""
             if mode_changed or not previous_text:
                 self._start_sequence(time.monotonic())
@@ -83,6 +86,9 @@ class AnimatedChevronRow:
         self.static_chevron_label.text = ""
 
     def update(self, now: float) -> None:
+        if self.left_chevron_animation is None or self.right_chevron_animation is None:
+            return
+
         left_finished = self.left_chevron_animation.update(now)
         right_finished = self.right_chevron_animation.update(now)
 
@@ -110,6 +116,16 @@ class AnimatedChevronRow:
         right_end_x = right_start_x + chevron_block_span
         return left_start_x, left_end_x, right_start_x, right_end_x
 
+    def _ensure_chevron_animations(self) -> None:
+        if self.left_chevron_animation is not None and self.right_chevron_animation is not None:
+            return
+
+        left_start_x, left_end_x, right_start_x, right_end_x = self._chevron_track()
+        self.left_chevron_animation = self._build_animation(left_start_x, left_end_x, self.chevron_color, 0.0)
+        self.right_chevron_animation = self._build_animation(right_start_x, right_end_x, self.chevron_color, 0.0)
+        self.left_chevron_animation.add_to_group(self.left_animation_group)
+        self.right_chevron_animation.add_to_group(self.right_animation_group)
+
     def _hidden_slot_count_for_text(self, text: str) -> int:
         middle_width = label.Label(self.font, text=text, color=self.text_color, x=0, y=self.line_y).bounding_box[2]
         middle_width = max(middle_width, self.chevron_width)
@@ -121,6 +137,8 @@ class AnimatedChevronRow:
         return AnimatedText.DIRECTION_LEFT_TO_RIGHT
 
     def _hide_current_chevrons(self) -> None:
+        if self.left_chevron_animation is None or self.right_chevron_animation is None:
+            return
         self.left_chevron_animation.stop()
         self.right_chevron_animation.stop()
 
@@ -129,6 +147,8 @@ class AnimatedChevronRow:
         self.static_chevron_label.x = self.content_x + int((self.content_width - self.chevron_width) / 2)
 
     def _start_sequence(self, now: float) -> None:
+        if self.left_chevron_animation is None or self.right_chevron_animation is None:
+            return
         self.left_chevron_animation.stop()
         self.right_chevron_animation.stop()
         if self.align == self.ALIGN_RIGHT:

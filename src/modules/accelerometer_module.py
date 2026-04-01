@@ -36,22 +36,17 @@ class AccelerometerModule:
             print(f"wait_for_reset={self.wait_for_reset} x={x:.3f}G, y={y:.3f}G, z={z:.3f}G")
         return x, y, z
 
-    def check_next_by_axis(self, axis: int):
-        axes = self.read()
+    def classify_axes(self):
+        x, y, z = self.read()
         if self.wait_for_reset:
-            return False
-        value = axes[axis]
-        if value > self.rotation_threshold:
-            self.wait_for_reset = True
-            return True
-        return False
+            return None
 
-    def check_previous_by_axis(self, axis: int):
-        axes = self.read()
-        if self.wait_for_reset:
-            return False
-        value = axes[axis]
-        if value < -self.rotation_threshold:
-            self.wait_for_reset = True
-            return True
-        return False
+        values = (x, y, z)
+        for axis, value in enumerate(values):
+            if value > self.rotation_threshold:
+                self.wait_for_reset = True
+                return (axis, 1)
+            if value < -self.rotation_threshold:
+                self.wait_for_reset = True
+                return (axis, -1)
+        return None
