@@ -31,7 +31,7 @@ TRAIN_RADAR_CONFIG = TrainRadarConfig(
         font_path="/assets/4by6.bdf",
         frame_interval_seconds=0.05,
         layout_refresh_seconds=1.0,
-        divider_color=0x202020,
+        divider_color=0x999999,
     ),
     panel_layout=TrainRadarPanelLayoutConfig(
         font_height=6,
