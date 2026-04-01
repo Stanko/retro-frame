@@ -1,10 +1,10 @@
-import gc
 import time
 import busio
 import board
 
 from src.apps.splash_app import SplashApp
 from src.modules.display_module import DisplayModule
+from src.modules.garbage_collector_module import GarbageCollectorModule
 from src.modules.network_module import NetworkModule
 from src.modules.real_time_module import RealTimeClockModule
 from src.modules.user_input_module import UserInputModule
@@ -20,6 +20,7 @@ class RetroFrame:
         self.user_input = UserInputModule(self.i2c, settings.accelerometer, settings.rotary_encoder)
         self.network: NetworkModule = NetworkModule(settings.wifi)
         self.real_time: RealTimeClockModule = RealTimeClockModule(self.i2c, self.network, settings.real_time)
+        self.garbage_collector = GarbageCollectorModule(collection_interval_seconds=30)
         self.modules = {"real_time": self.real_time, "network": self.network}
 
         self.current_app = None
@@ -72,7 +73,7 @@ class RetroFrame:
         self.set_current_app(self.current_app_index)
         while True:
             # print(f"Current available memory: {gc.mem_free()} bytes")
-            gc.collect()
+            self.garbage_collector.run_if_due()
             self.real_time.check_for_time_sync()
             self.check_for_scheduled_app_switch()
             input_events = self.user_input.poll()
