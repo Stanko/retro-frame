@@ -23,6 +23,7 @@ class HardwareRealTimeClock:
         self.settings = settings
         self.i2c = i2c
         self.device = self._create_device()
+        self._cached_sync_marker = self._load_sync_marker()
 
     @property
     def is_available(self):
@@ -50,6 +51,9 @@ class HardwareRealTimeClock:
             return None
 
     def has_been_synced(self):
+        return self._cached_sync_marker
+
+    def _load_sync_marker(self):
         if not self.is_available:
             return False
 
@@ -66,6 +70,7 @@ class HardwareRealTimeClock:
 
         try:
             microcontroller.nvm[self.sync_marker_nvm_index] = self.synced_marker_value
+            self._cached_sync_marker = True
         except (AttributeError, IndexError, OSError) as error:
             print("Could not persist RTC sync marker to NVM.")
             print("Reason:", error)
@@ -203,7 +208,7 @@ class RealTimeClockModule:
     def check_for_time_sync(self):
         if self.network.wifi_settings.skip_connection:
             return
-        
+
         if self.hardware_clock.is_available and self.hardware_clock.has_been_synced():
             return
 
